@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Dashboard from './components/Dashboard.svelte'
   import TaskList from './components/TaskList.svelte'
 
   // Simple MVP shell - routes will be added later
@@ -41,8 +42,7 @@
 
   <main class="p-4">
     {#if currentView === 'dashboard'}
-      <h2 class="text-xl mb-4">Dashboard</h2>
-      <p class="text-slate-400">Status indicators coming soon...</p>
+      <Dashboard />
     {:else if currentView === 'tasks'}
       <TaskList />
     {:else if currentView === 'outcomes'}
