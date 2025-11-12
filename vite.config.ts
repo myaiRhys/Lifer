@@ -2,7 +2,9 @@ import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { VitePWA } from 'vite-plugin-pwa'
 
-const baseUrl = process.env.NODE_ENV === 'production' ? '/lifer/' : '/'
+// Always use /lifer/ for GitHub Pages deployment
+// For local dev, this works fine with the dev server
+const baseUrl = '/lifer/'
 
 export default defineConfig({
   base: baseUrl,
