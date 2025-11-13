@@ -3,5 +3,9 @@ export const KEYS = {
   TASKS: 'tasks',
   OUTCOMES: 'outcomes',
   PRACTICES: 'practices',
-  HISTORY: 'history'
+  HISTORY: 'history',
+  ACHIEVEMENTS: 'achievements',
+  CHALLENGES: 'challenges',
+  POWER_UPS: 'powerUps',
+  SETTINGS: 'settings'
 } as const

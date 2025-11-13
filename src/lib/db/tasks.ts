@@ -1,6 +1,7 @@
 import { get, set } from 'idb-keyval'
 import { KEYS } from './keys'
 import type { Task } from '../types'
+import { addHistoryRecord } from './history'
 
 function generateUUID(): string {
   return crypto.randomUUID()
@@ -55,11 +56,34 @@ export async function deleteTask(id: string): Promise<boolean> {
 }
 
 export async function completeTask(id: string, xpEarned: number): Promise<Task | null> {
-  return updateTask(id, {
+  const task = await getTaskById(id)
+  if (!task) return null
+
+  const completedAt = new Date().toISOString()
+  const now = new Date()
+
+  const updated = await updateTask(id, {
     completed: true,
-    completedAt: new Date().toISOString(),
+    completedAt,
     xpEarned
   })
+
+  if (updated) {
+    // Add to history
+    await addHistoryRecord({
+      type: 'task',
+      entityId: task.id,
+      entitySnapshot: updated,
+      completedAt,
+      xpEarned,
+      wasInMorningWindow: task.isMorningTask && now.getHours() < 9,
+      leverageScore: task.leverageScore,
+      dayOfWeek: now.getDay(),
+      hourOfDay: now.getHours()
+    })
+  }
+
+  return updated
 }
 
 export async function getActiveTasks(): Promise<Task[]> {
