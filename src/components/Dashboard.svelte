@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { getUserState, getActiveTasks, getTodaysPractices } from '../lib/db'
+  import DailyChallenges from './DailyChallenges.svelte'
   import type { UserState, Task, Practice } from '../lib/types'
 
   let userState: UserState | null = null
@@ -129,6 +130,11 @@
           </div>
         {/each}
       </div>
+    </div>
+
+    <!-- Daily Challenges -->
+    <div class="mb-6">
+      <DailyChallenges />
     </div>
 
     <!-- Bottom Grid: Tasks & Practices -->

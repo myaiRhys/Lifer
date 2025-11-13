@@ -1,18 +1,27 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { getTasks, createTask, updateTask, deleteTask, completeTask } from '../lib/db'
-  import type { Task } from '../lib/types'
+  import { getUserState, addXP } from '../lib/db/userState'
+  import { checkAndUnlockAchievements } from '../lib/db/achievements'
+  import { celebrateTaskComplete, showFloatingXP, hapticSuccess } from '../lib/animations'
+  import { soundSystem } from '../lib/sounds'
+  import type { Task, Achievement } from '../lib/types'
+  import LevelUpModal from './LevelUpModal.svelte'
+  import AchievementNotification from './AchievementNotification.svelte'
 
   let tasks: Task[] = []
   let showAddForm = false
   let editingTask: Task | null = null
+  let showLevelUp = false
+  let newLevel = 1
+  let newAchievement: Achievement | null = null
 
   // Form fields
   let title = ''
   let description = ''
   let leverageScore: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 = 5
   let isMorningTask = false
-  let outcomeId = 'none' // For now, default to 'none' until we build outcomes
+  let outcomeId = 'none'
 
   onMount(async () => {
     await loadTasks()
@@ -20,7 +29,6 @@
 
   async function loadTasks() {
     tasks = await getTasks()
-    // Sort by leverage score (high to low), then by created date
     tasks.sort((a, b) => {
       if (b.leverageScore !== a.leverageScore) {
         return b.leverageScore - a.leverageScore
@@ -65,10 +73,37 @@
     }
   }
 
-  async function handleCompleteTask(task: Task) {
-    // Calculate XP based on leverage score
+  async function handleCompleteTask(task: Task, event: MouseEvent) {
     const xp = task.leverageScore * 10
+    const oldState = await getUserState()
+    const oldLevel = oldState?.level || 1
+
+    // Complete task and add XP
     await completeTask(task.id, xp)
+    const newState = await addXP(xp)
+
+    // Animations and sounds
+    celebrateTaskComplete(task.leverageScore)
+    soundSystem.taskComplete(task.leverageScore)
+    hapticSuccess()
+
+    // Show floating XP
+    if (event.target instanceof HTMLElement) {
+      showFloatingXP(event.target, xp)
+    }
+
+    // Check for level up
+    if (newState && newState.level > oldLevel) {
+      newLevel = newState.level
+      showLevelUp = true
+    }
+
+    // Check for new achievements
+    const achievements = await checkAndUnlockAchievements()
+    if (achievements.length > 0) {
+      newAchievement = achievements[0] // Show first achievement
+    }
+
     await loadTasks()
   }
 
@@ -201,7 +236,7 @@
         <div class="bg-slate-800 border border-slate-700 rounded-lg p-4 hover:border-slate-600 transition-colors">
           <div class="flex items-start gap-3">
             <button
-              on:click={() => handleCompleteTask(task)}
+              on:click={(e) => handleCompleteTask(task, e)}
               class="mt-1 w-5 h-5 border-2 border-slate-600 rounded hover:border-green-500 transition-colors flex-shrink-0"
               title="Complete task"
             />
@@ -283,3 +318,7 @@
     </details>
   {/if}
 </div>
+
+<!-- Modals -->
+<LevelUpModal bind:visible={showLevelUp} level={newLevel} onClose={() => showLevelUp = false} />
+<AchievementNotification achievement={newAchievement} onClose={() => newAchievement = null} />
