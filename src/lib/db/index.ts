@@ -10,3 +10,8 @@ export * from './focus'
 export * from './history'
 export * from './recurringTasks'
 export * from './chores'
+// v2.0 features
+export * from './energy'
+export * from './couples'
+export * from './outcomeTree'
+export * from './bodyDoubling'

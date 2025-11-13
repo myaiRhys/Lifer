@@ -174,16 +174,113 @@ export interface PurchasedPowerUp {
 
 export interface FocusSession {
   id: string
-  type: "pomodoro" | "deep_work"
+  type: "pomodoro" | "deep_work" | "ultradian"
   duration: number
   taskId?: string
   startedAt: string
   completedAt?: string
   xpEarned: number
   interrupted: boolean
+  // Ultradian-specific fields
+  plannedDuration?: number
+  actualDuration?: number
+  flowStateAchieved?: boolean
+  breakQuality?: number
 }
 
-export type Theme = "dark" | "light" | "ocean" | "fire" | "forest" | "sunset"
+// Energy tracking for BPT
+export interface EnergyLog {
+  id: string
+  timestamp: string
+  energy: number // 1-10
+  context: 'morning' | 'midday' | 'evening'
+  notes?: string
+  completedTasksInLastHour: number
+}
+
+export interface BPTAnalysis {
+  userId: string
+  dataPoints: number
+  peakWindow: { start: string; end: string; confidence: number }
+  energyCurve: Array<{ hour: number; avgEnergy: number }>
+  lastCalculated: string
+}
+
+// Couples mode
+export interface CouplesProfile {
+  id: string
+  partner1Id: string
+  partner2Id: string
+  partner1Name: string
+  partner2Name: string
+  relationshipLevel: number
+  sharedXP: number
+  couplesStreak: number
+  sharedOutcomes: string[]
+  sharedRewards: string[]
+  createdAt: string
+}
+
+export interface MorningSync {
+  id: string
+  coupleId: string
+  date: string
+  partner1Priorities: [string, string, string]
+  partner2Priorities: [string, string, string]
+  partner1Energy: number
+  partner2Energy: number
+  sharedSessionPlanned: boolean
+  sharedSessionTime?: string
+  sharedOutcome?: string
+  coupleReward?: string
+  completedSync: boolean
+  completedAt?: string
+}
+
+export interface CoupleReward {
+  id: string
+  coupleId: string
+  name: string
+  description: string
+  category: 'quality_time' | 'intimate' | 'practical' | 'big_goal'
+  xpCost: number
+  condition: string
+  isPrivate: boolean
+  createdBy: string
+  unlocked: boolean
+  redeemedAt?: string
+  createdAt: string
+}
+
+// Outcome Trees (extended)
+export interface OutcomeNode {
+  id: string
+  type: 'purpose' | 'outcome' | 'milestone'
+  title: string
+  description: string
+  parentId?: string
+  childIds: string[]
+  progress: number // 0-100
+  color: string
+  isActive: boolean
+  createdAt: string
+  linkedTaskCount?: number
+}
+
+// Body Doubling
+export interface BodyDoublingSession {
+  id: string
+  participants: [string, string]
+  scheduledStart: string
+  actualStart?: string
+  duration: number
+  tasksCompleted: { [userId: string]: number }
+  focusQuality: { [userId: string]: number }
+  completedAt?: string
+  createdAt: string
+}
+
+export type Theme = "dark" | "light" | "ocean" | "fire" | "forest" | "sunset" | "military" | "cowboy" | "academic" | "cyberpunk" | "zen"
 
 export interface AppSettings {
   theme: Theme

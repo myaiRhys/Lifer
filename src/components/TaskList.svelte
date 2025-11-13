@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { getTasks, createTask, updateTask, deleteTask, completeTask, createRecurringTaskTemplate, spawnTodaysRecurringTasks } from '../lib/db'
+  import { getTasks, createTask, updateTask, deleteTask, completeTask, createRecurringTaskTemplate, spawnTodaysRecurringTasks, isInBPTWindow } from '../lib/db'
   import { getUserState, addXP } from '../lib/db/userState'
   import { checkAndUnlockAchievements } from '../lib/db/achievements'
   import { celebrateTaskComplete, showFloatingXP, hapticSuccess } from '../lib/animations'
@@ -106,7 +106,12 @@
   }
 
   async function handleCompleteTask(task: Task, event: MouseEvent) {
-    const xp = task.leverageScore * 10
+    // Check if in BPT window for multiplier
+    const inBPT = await isInBPTWindow()
+    const baseXP = task.leverageScore * 10
+    const multiplier = inBPT ? 2 : 1
+    const xp = baseXP * multiplier
+
     const oldState = await getUserState()
     const oldLevel = oldState?.level || 1
 
@@ -119,9 +124,16 @@
     soundSystem.taskComplete(task.leverageScore)
     hapticSuccess()
 
-    // Show floating XP
+    // Show floating XP with BPT indicator
     if (event.target instanceof HTMLElement) {
       showFloatingXP(event.target, xp)
+    }
+
+    // Alert with BPT bonus info
+    if (inBPT) {
+      setTimeout(() => {
+        alert(`🔥 BPT BONUS! Task completed during your peak time.\n+${xp} XP (2x multiplier)`)
+      }, 500)
     }
 
     // Check for level up

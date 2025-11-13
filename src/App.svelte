@@ -10,6 +10,15 @@
   import Outcomes from './components/Outcomes.svelte'
   import Onboarding from './components/Onboarding.svelte'
   import WeeklyReview from './components/WeeklyReview.svelte'
+  // v2.0 components
+  import EnergyLogger from './components/EnergyLogger.svelte'
+  import BPTAnalysis from './components/BPTAnalysis.svelte'
+  import UltradianTimer from './components/UltradianTimer.svelte'
+  import CouplesMode from './components/CouplesMode.svelte'
+  import OutcomeTreeView from './components/OutcomeTreeView.svelte'
+  import BodyDoublingView from './components/BodyDoublingView.svelte'
+  import TaskPrioritizer from './components/TaskPrioritizer.svelte'
+  import PersonalAnalytics from './components/PersonalAnalytics.svelte'
   import { initializeStorage, getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
   import { notificationSystem } from './lib/notifications'
@@ -175,22 +184,64 @@
         ✅ Tasks
       </button>
       <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'prioritizer' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'prioritizer'}
+      >
+        🎯 AI Prioritizer
+      </button>
+      <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'focus' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'focus'}
+      >
+        ⏱️ Pomodoro
+      </button>
+      <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'ultradian' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'ultradian'}
+      >
+        🧠 Ultradian
+      </button>
+      <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'energy' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'energy'}
+      >
+        ⚡ Energy & BPT
+      </button>
+      <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'outcome-tree' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'outcome-tree'}
+      >
+        🌳 Outcome Trees
+      </button>
+      <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'couples' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'couples'}
+      >
+        💑 Pair Lifers
+      </button>
+      <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'bodydoubling' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'bodydoubling'}
+      >
+        👥 Body Doubling
+      </button>
+      <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'analytics' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'analytics'}
+      >
+        📈 Analytics
+      </button>
+      <button
         class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'chores' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
         on:click={() => currentView = 'chores'}
       >
         🏠 Chores
       </button>
       <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'focus' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'focus'}
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'practices' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'practices'}
       >
-        ⏱️ Focus Timer
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'shop' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'shop'}
-      >
-        🛒 Power-Up Shop
+        ♻️ Practices
       </button>
       <button
         class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'heatmap' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
@@ -199,16 +250,16 @@
         📅 Activity Map
       </button>
       <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'shop' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'shop'}
+      >
+        🛒 Power-Ups
+      </button>
+      <button
         class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'outcomes' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
         on:click={() => currentView = 'outcomes'}
       >
-        🎯 Outcomes
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'practices' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'practices'}
-      >
-        ♻️ Practices
+        🎯 Outcomes (v1)
       </button>
     </div>
   </nav>
@@ -258,6 +309,36 @@
               on:click={() => changeTheme('sunset')}
             >
               🌅 Sunset
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg border transition-colors {settings.theme === 'military' ? 'bg-slate-700 border-blue-500' : 'border-slate-600 hover:border-slate-500'}"
+              on:click={() => changeTheme('military')}
+            >
+              🎖️ Military
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg border transition-colors {settings.theme === 'cowboy' ? 'bg-slate-700 border-blue-500' : 'border-slate-600 hover:border-slate-500'}"
+              on:click={() => changeTheme('cowboy')}
+            >
+              🤠 Cowboy
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg border transition-colors {settings.theme === 'academic' ? 'bg-slate-700 border-blue-500' : 'border-slate-600 hover:border-slate-500'}"
+              on:click={() => changeTheme('academic')}
+            >
+              🎓 Academic
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg border transition-colors {settings.theme === 'cyberpunk' ? 'bg-slate-700 border-blue-500' : 'border-slate-600 hover:border-slate-500'}"
+              on:click={() => changeTheme('cyberpunk')}
+            >
+              🤖 Cyberpunk
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg border transition-colors {settings.theme === 'zen' ? 'bg-slate-700 border-blue-500' : 'border-slate-600 hover:border-slate-500'}"
+              on:click={() => changeTheme('zen')}
+            >
+              🌱 Zen
             </button>
           </div>
         </div>
@@ -347,18 +428,35 @@
       <Dashboard />
     {:else if currentView === 'tasks'}
       <TaskList />
-    {:else if currentView === 'chores'}
-      <Chores />
+    {:else if currentView === 'prioritizer'}
+      <TaskPrioritizer />
     {:else if currentView === 'focus'}
       <FocusTimer />
-    {:else if currentView === 'shop'}
-      <PowerUpShop />
-    {:else if currentView === 'heatmap'}
-      <HeatMap />
-    {:else if currentView === 'outcomes'}
-      <Outcomes />
+    {:else if currentView === 'ultradian'}
+      <UltradianTimer />
+    {:else if currentView === 'energy'}
+      <div class="space-y-6">
+        <EnergyLogger />
+        <BPTAnalysis />
+      </div>
+    {:else if currentView === 'outcome-tree'}
+      <OutcomeTreeView />
+    {:else if currentView === 'couples'}
+      <CouplesMode />
+    {:else if currentView === 'bodydoubling'}
+      <BodyDoublingView />
+    {:else if currentView === 'analytics'}
+      <PersonalAnalytics />
+    {:else if currentView === 'chores'}
+      <Chores />
     {:else if currentView === 'practices'}
       <Practices />
+    {:else if currentView === 'heatmap'}
+      <HeatMap />
+    {:else if currentView === 'shop'}
+      <PowerUpShop />
+    {:else if currentView === 'outcomes'}
+      <Outcomes />
     {/if}
   </main>
 

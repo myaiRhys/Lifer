@@ -84,6 +84,76 @@ export const themes: Record<Theme, { name: string; colors: Record<string, string
       'accent': '#f472b6',
       'accent-hover': '#ec4899'
     }
+  },
+  military: {
+    name: '🎖️ Military Command',
+    colors: {
+      'bg-primary': '#1a251a',
+      'bg-secondary': '#243e24',
+      'bg-tertiary': '#2d4d2d',
+      'border': '#3d5c3d',
+      'text-primary': '#e8f0e8',
+      'text-secondary': '#c2d6c2',
+      'text-muted': '#8fad8f',
+      'accent': '#4ade80',
+      'accent-hover': '#22c55e'
+    }
+  },
+  cowboy: {
+    name: '🤠 Wild West',
+    colors: {
+      'bg-primary': '#2d1810',
+      'bg-secondary': '#4a2618',
+      'bg-tertiary': '#6b3820',
+      'border': '#8b4a28',
+      'text-primary': '#fff5e6',
+      'text-secondary': '#f5d6b3',
+      'text-muted': '#d2a679',
+      'accent': '#d2691e',
+      'accent-hover': '#b8541a'
+    }
+  },
+  academic: {
+    name: '🎓 Academic Scholar',
+    colors: {
+      'bg-primary': '#1e1f3a',
+      'bg-secondary': '#2d2f5f',
+      'bg-tertiary': '#3d4080',
+      'border': '#4d508f',
+      'text-primary': '#f0f1ff',
+      'text-secondary': '#d4d6ff',
+      'text-muted': '#a0a5cc',
+      'accent': '#6366f1',
+      'accent-hover': '#4f46e5'
+    }
+  },
+  cyberpunk: {
+    name: '🤖 Cyberpunk',
+    colors: {
+      'bg-primary': '#0a0a1a',
+      'bg-secondary': '#1a0a1f',
+      'bg-tertiary': '#2a1030',
+      'border': '#ff006e',
+      'text-primary': '#00f5ff',
+      'text-secondary': '#ff006e',
+      'text-muted': '#b366ff',
+      'accent': '#ff006e',
+      'accent-hover': '#d6005c'
+    }
+  },
+  zen: {
+    name: '🌱 Zen Garden',
+    colors: {
+      'bg-primary': '#1a2e1a',
+      'bg-secondary': '#2d4a2d',
+      'bg-tertiary': '#40664b',
+      'border': '#52b788',
+      'text-primary': '#f0fff0',
+      'text-secondary': '#d8f3d8',
+      'text-muted': '#95d5b2',
+      'accent': '#52b788',
+      'accent-hover': '#40916c'
+    }
   }
 }
 
@@ -102,4 +172,24 @@ export function applyTheme(theme: Theme) {
 export function getStoredTheme(): Theme {
   const stored = localStorage.getItem('lifer-theme')
   return (stored as Theme) || 'dark'
+}
+
+// Theme-specific terminology
+export const themeLabels: Record<Theme, { xp: string; level: string; tasks: string; icon: string }> = {
+  dark: { xp: 'XP', level: 'Level', tasks: 'Tasks', icon: '🎯' },
+  light: { xp: 'XP', level: 'Level', tasks: 'Tasks', icon: '🎯' },
+  ocean: { xp: 'XP', level: 'Level', tasks: 'Tasks', icon: '🌊' },
+  fire: { xp: 'XP', level: 'Level', tasks: 'Tasks', icon: '🔥' },
+  forest: { xp: 'XP', level: 'Level', tasks: 'Tasks', icon: '🌲' },
+  sunset: { xp: 'XP', level: 'Level', tasks: 'Tasks', icon: '🌅' },
+  military: { xp: 'Combat Points', level: 'Rank', tasks: 'Missions', icon: '🎖️' },
+  cowboy: { xp: 'Honor Points', level: 'Renown', tasks: 'Bounties', icon: '🤠' },
+  academic: { xp: 'Research Credits', level: 'Academic Rank', tasks: 'Assignments', icon: '🎓' },
+  cyberpunk: { xp: 'Street Cred', level: 'Clearance', tasks: 'Exploits', icon: '🤖' },
+  zen: { xp: 'Life Force', level: 'Growth Stage', tasks: 'Practices', icon: '🌱' }
+}
+
+export function getThemeLabels(theme?: Theme): typeof themeLabels[Theme] {
+  const currentTheme = theme || getStoredTheme()
+  return themeLabels[currentTheme] || themeLabels.dark
 }

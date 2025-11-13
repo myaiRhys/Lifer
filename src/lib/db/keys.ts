@@ -10,5 +10,13 @@ export const KEYS = {
   SETTINGS: 'settings',
   FOCUS_SESSIONS: 'focusSessions',
   RECURRING_TASKS: 'recurringTasks',
-  CHORES: 'chores'
+  CHORES: 'chores',
+  // v2.0 features
+  ENERGY_LOGS: 'energyLogs',
+  BPT_ANALYSIS: 'bptAnalysis',
+  COUPLES_PROFILE: 'couplesProfile',
+  MORNING_SYNCS: 'morningSyncs',
+  COUPLE_REWARDS: 'coupleRewards',
+  OUTCOME_NODES: 'outcomeNodes',
+  BODY_DOUBLING_SESSIONS: 'bodyDoublingSessions'
 } as const

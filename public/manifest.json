@@ -1,12 +1,12 @@
 {
-  "name": "Lifer - Life Tracker",
+  "name": "Lifer v2.0 - Gamified Life Management",
   "short_name": "Lifer",
-  "description": "High-leverage life management system",
+  "description": "Gamified life management with BPT tracking, ultradian rhythms, couples mode, AI prioritization & more",
   "theme_color": "#1e293b",
   "background_color": "#0f172a",
   "display": "standalone",
-  "scope": "/lifer/",
-  "start_url": "/lifer/",
+  "scope": "/",
+  "start_url": "/",
   "icons": [
     {
       "src": "/lifer/icons/icon-192.svg",
