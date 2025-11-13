@@ -2,9 +2,8 @@ import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// Use root path for simpler deployment
-// GitHub Pages will work with repository name automatically
-const baseUrl = process.env.NODE_ENV === 'production' ? '/Lifer/' : '/'
+// Use lowercase lifer to match existing GitHub Pages deployment
+const baseUrl = process.env.NODE_ENV === 'production' ? '/lifer/' : '/'
 
 export default defineConfig({
   base: baseUrl,

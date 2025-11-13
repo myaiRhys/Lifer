@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0;url=/Lifer/">
+  <meta http-equiv="refresh" content="0;url=/lifer/">
   <script>
     // Redirect to the base URL and let the SPA handle routing
-    // This preserves the path so the app can navigate to it
-    const pathSegmentsToKeep = 1; // Keep '/Lifer/'
+    const pathSegmentsToKeep = 1; // Keep '/lifer/'
     const path = window.location.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/');
-    const url = window.location.origin + '/Lifer/' + (path ? '#/' + path : '');
+    const url = window.location.origin + '/lifer/' + (path ? '#/' + path : '');
     window.location.replace(url);
   </script>
   <title>Redirecting...</title>
