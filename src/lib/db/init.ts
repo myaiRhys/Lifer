@@ -4,20 +4,36 @@ import type { UserState, Practice } from '../types'
 
 export const CORE_PRACTICES: Omit<Practice, 'id' | 'habitStrength' | 'currentStreak' | 'longestStreak' | 'todayValue' | 'todayCompleted' | 'lastLoggedAt' | 'createdAt'>[] = [
   {
+    name: "Water Intake",
+    type: "positive",
+    target: 2000,
+    unit: "ml",
+    frequency: "daily",
+    description: "Drink at least 2 liters of water daily for hydration"
+  },
+  {
+    name: "Medications",
+    type: "positive",
+    target: 1,
+    unit: "dose",
+    frequency: "daily",
+    description: "Take daily medications as prescribed"
+  },
+  {
+    name: "WRC (Walk/Run/Cardio)",
+    type: "positive",
+    target: 30,
+    unit: "minutes",
+    frequency: "daily",
+    description: "Daily cardiovascular activity for heart health"
+  },
+  {
     name: "Sleep",
     type: "positive",
     target: 8,
     unit: "hours",
     frequency: "daily",
     description: "7-9 hours optimal for testosterone and recovery"
-  },
-  {
-    name: "Water Intake",
-    type: "positive",
-    target: 3700,
-    unit: "ml",
-    frequency: "daily",
-    description: "Minimum daily fluid intake"
   },
   {
     name: "Protein",
@@ -111,6 +127,28 @@ export async function initializeStorage() {
       createdAt: new Date().toISOString()
     }))
     await set(KEYS.PRACTICES, practices)
+  } else {
+    // Existing user - add any missing core practices
+    const existingPractices: Practice[] = await get(KEYS.PRACTICES) || []
+    const existingNames = new Set(existingPractices.map(p => p.name))
+
+    const newPractices = CORE_PRACTICES
+      .filter(p => !existingNames.has(p.name))
+      .map(p => ({
+        ...p,
+        id: generateUUID(),
+        habitStrength: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        todayValue: 0,
+        todayCompleted: false,
+        lastLoggedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString()
+      }))
+
+    if (newPractices.length > 0) {
+      await set(KEYS.PRACTICES, [...existingPractices, ...newPractices])
+    }
   }
 
   // Initialize empty arrays if needed
