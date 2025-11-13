@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
   import Dashboard from './components/Dashboard.svelte'
   import TaskList from './components/TaskList.svelte'
+  import RecurringTasks from './components/RecurringTasks.svelte'
   import PowerUpShop from './components/PowerUpShop.svelte'
   import FocusTimer from './components/FocusTimer.svelte'
   import HeatMap from './components/HeatMap.svelte'
@@ -81,6 +82,12 @@
         on:click={() => currentView = 'tasks'}
       >
         ✅ Tasks
+      </button>
+      <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'recurring' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'recurring'}
+      >
+        🔄 Recurring
       </button>
       <button
         class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'focus' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
@@ -227,6 +234,8 @@
       <Dashboard />
     {:else if currentView === 'tasks'}
       <TaskList />
+    {:else if currentView === 'recurring'}
+      <RecurringTasks />
     {:else if currentView === 'focus'}
       <FocusTimer />
     {:else if currentView === 'shop'}
