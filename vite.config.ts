@@ -2,9 +2,9 @@ import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// Always use /lifer/ for GitHub Pages deployment
-// For local dev, this works fine with the dev server
-const baseUrl = '/lifer/'
+// Use capital L to match GitHub Pages URL
+// GitHub provides: https://myairhys.github.io/Lifer/
+const baseUrl = '/Lifer/'
 
 export default defineConfig({
   base: baseUrl,
