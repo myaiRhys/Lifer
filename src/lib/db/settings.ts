@@ -11,7 +11,9 @@ const DEFAULT_SETTINGS: AppSettings = {
   vibrationEnabled: true,
   pomodoroLength: 25,
   shortBreakLength: 5,
-  longBreakLength: 15
+  longBreakLength: 15,
+  onboardingCompleted: false,
+  lastWeeklyReview: null
 }
 
 export async function getSettings(): Promise<AppSettings> {

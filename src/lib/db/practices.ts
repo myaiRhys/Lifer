@@ -86,7 +86,7 @@ export async function logPractice(id: string, value: number): Promise<Practice |
     habitStrength = Math.max(0, habitStrength - 5)
   }
 
-  return updatePractice(id, {
+  const result = await updatePractice(id, {
     todayValue: value,
     todayCompleted,
     currentStreak,
@@ -97,4 +97,10 @@ export async function logPractice(id: string, value: number): Promise<Practice |
     lastLoggedAt: now,
     lastCompletedAt: todayCompleted ? now : practice.lastCompletedAt
   })
+
+  // Recalculate health stats after logging a practice
+  const { calculateHealthStatsFromPractices } = await import('./userState')
+  await calculateHealthStatsFromPractices()
+
+  return result
 }

@@ -6,18 +6,39 @@
   import PowerUpShop from './components/PowerUpShop.svelte'
   import FocusTimer from './components/FocusTimer.svelte'
   import HeatMap from './components/HeatMap.svelte'
+  import Practices from './components/Practices.svelte'
+  import Outcomes from './components/Outcomes.svelte'
+  import Onboarding from './components/Onboarding.svelte'
+  import WeeklyReview from './components/WeeklyReview.svelte'
   import { initializeStorage, getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
   import { notificationSystem } from './lib/notifications'
+  import { exportAllData, importAllData, downloadBackup, readBackupFile } from './lib/db/backup'
   import type { AppSettings, Theme } from './lib/types'
 
   let currentView = 'dashboard'
   let settings: AppSettings | null = null
   let showSettings = false
+  let showOnboarding = false
+  let showWeeklyReview = false
+  let fileInput: HTMLInputElement
 
   onMount(async () => {
     await initializeStorage()
     settings = await getSettings()
+
+    // Check if onboarding is needed
+    if (!settings.onboardingCompleted) {
+      showOnboarding = true
+    }
+
+    // Check if weekly review is due (if onboarding is complete)
+    if (settings.onboardingCompleted) {
+      const shouldShowReview = checkWeeklyReviewDue(settings.lastWeeklyReview)
+      if (shouldShowReview) {
+        showWeeklyReview = true
+      }
+    }
 
     // Apply stored theme
     const theme = getStoredTheme()
@@ -39,6 +60,76 @@
     applyTheme(theme)
     const updated = await updateSettings({ theme })
     settings = updated
+  }
+
+  async function handleExport() {
+    try {
+      const data = await exportAllData()
+      const filename = `lifer-backup-${new Date().toISOString().split('T')[0]}.json`
+      downloadBackup(data, filename)
+    } catch (error) {
+      alert('Failed to export data. Please try again.')
+      console.error('Export error:', error)
+    }
+  }
+
+  async function handleImport() {
+    fileInput.click()
+  }
+
+  async function handleFileSelected(event: Event) {
+    const target = event.target as HTMLInputElement
+    const file = target.files?.[0]
+
+    if (!file) return
+
+    if (!confirm('This will replace all current data. Are you sure you want to continue?')) {
+      return
+    }
+
+    try {
+      const jsonString = await readBackupFile(file)
+      const success = await importAllData(jsonString)
+
+      if (success) {
+        alert('Data imported successfully! The page will now reload.')
+        window.location.reload()
+      } else {
+        alert('Failed to import data. Please check the file format.')
+      }
+    } catch (error) {
+      alert('Failed to import data. Please try again.')
+      console.error('Import error:', error)
+    } finally {
+      // Reset file input
+      target.value = ''
+    }
+  }
+
+  async function completeOnboarding() {
+    showOnboarding = false
+    const updated = await updateSettings({ onboardingCompleted: true })
+    settings = updated
+  }
+
+  function checkWeeklyReviewDue(lastReview: string | null): boolean {
+    if (!lastReview) return true // Never done a review
+
+    const lastReviewDate = new Date(lastReview)
+    const now = new Date()
+    const daysSinceReview = Math.floor((now.getTime() - lastReviewDate.getTime()) / (1000 * 60 * 60 * 24))
+
+    return daysSinceReview >= 7
+  }
+
+  async function completeWeeklyReview() {
+    showWeeklyReview = false
+    const updated = await updateSettings({ lastWeeklyReview: new Date().toISOString() })
+    settings = updated
+  }
+
+  function skipWeeklyReview() {
+    showWeeklyReview = false
   }
 </script>
 
@@ -219,6 +310,28 @@
           </label>
         </div>
 
+        <!-- Data Backup Section -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium mb-3">Data Backup</label>
+          <div class="space-y-2">
+            <button
+              class="w-full px-4 py-2 bg-green-900/30 hover:bg-green-900/50 text-green-400 border border-green-700 rounded-lg font-medium transition-colors"
+              on:click={handleExport}
+            >
+              📥 Export All Data
+            </button>
+            <button
+              class="w-full px-4 py-2 bg-blue-900/30 hover:bg-blue-900/50 text-blue-400 border border-blue-700 rounded-lg font-medium transition-colors"
+              on:click={handleImport}
+            >
+              📤 Import Data
+            </button>
+            <p class="text-xs text-slate-400 mt-2">
+              Export your data as a JSON file for backup. Import to restore from a previous backup.
+            </p>
+          </div>
+        </div>
+
         <button
           class="w-full py-2 bg-blue-600 hover:bg-blue-500 rounded-lg font-medium transition-colors"
           on:click={() => showSettings = false}
@@ -243,11 +356,28 @@
     {:else if currentView === 'heatmap'}
       <HeatMap />
     {:else if currentView === 'outcomes'}
-      <h2 class="text-xl mb-4">Outcomes</h2>
-      <p class="text-slate-400">Outcome management coming soon...</p>
+      <Outcomes />
     {:else if currentView === 'practices'}
-      <h2 class="text-xl mb-4">Practices</h2>
-      <p class="text-slate-400">Practice tracking coming soon...</p>
+      <Practices />
     {/if}
   </main>
+
+  <!-- Hidden file input for import -->
+  <input
+    type="file"
+    accept=".json"
+    bind:this={fileInput}
+    on:change={handleFileSelected}
+    class="hidden"
+  />
+
+  <!-- Onboarding Modal -->
+  {#if showOnboarding}
+    <Onboarding on:complete={completeOnboarding} />
+  {/if}
+
+  <!-- Weekly Review Modal -->
+  {#if showWeeklyReview && !showOnboarding}
+    <WeeklyReview on:complete={completeWeeklyReview} on:skip={skipWeeklyReview} />
+  {/if}
 </div>

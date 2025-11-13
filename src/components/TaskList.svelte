@@ -11,6 +11,7 @@
 
   let tasks: Task[] = []
   let showAddForm = false
+  let showQuickCapture = false
   let editingTask: Task | null = null
   let showLevelUp = false
   let newLevel = 1
@@ -24,8 +25,22 @@
   let isRecurring = false
   let outcomeId = 'none'
 
+  // Quick capture
+  let quickTitle = ''
+
   onMount(async () => {
     await loadTasks()
+
+    // Keyboard shortcut for quick capture
+    function handleKeyboard(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault()
+        showQuickCapture = !showQuickCapture
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyboard)
+    return () => window.removeEventListener('keydown', handleKeyboard)
   })
 
   async function loadTasks() {
@@ -142,6 +157,22 @@
     leverageScore = 5
     isMorningTask = false
     isRecurring = false
+  }
+
+  async function handleQuickCapture() {
+    if (!quickTitle.trim()) return
+
+    await createTask({
+      title: quickTitle.trim(),
+      leverageScore: 5, // Default to medium leverage
+      outcomeId: 'none',
+      isMorningTask: false,
+      scheduledFor: new Date().toISOString()
+    })
+
+    quickTitle = ''
+    showQuickCapture = false
+    await loadTasks()
   }
 
   function getLeverageColor(score: number): string {
@@ -354,6 +385,53 @@
     </details>
   {/if}
 </div>
+
+<!-- Quick Capture Modal -->
+{#if showQuickCapture}
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" on:click={() => showQuickCapture = false}>
+    <div class="bg-slate-800 border-2 border-blue-500 rounded-lg p-6 max-w-lg w-full" on:click|stopPropagation>
+      <div class="mb-4">
+        <h3 class="text-xl font-bold mb-2">Quick Capture</h3>
+        <p class="text-sm text-slate-400">Press <kbd class="px-2 py-1 bg-slate-700 rounded text-xs">Ctrl+K</kbd> or <kbd class="px-2 py-1 bg-slate-700 rounded text-xs">⌘K</kbd> anytime</p>
+      </div>
+
+      <form on:submit|preventDefault={handleQuickCapture}>
+        <input
+          type="text"
+          bind:value={quickTitle}
+          placeholder="What needs to be done?"
+          autofocus
+          class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-3 text-lg focus:outline-none focus:border-blue-500 mb-4"
+        />
+
+        <div class="bg-slate-900 rounded-lg p-3 mb-4 text-sm text-slate-400">
+          <div class="mb-1">Defaults:</div>
+          <ul class="list-disc list-inside space-y-1">
+            <li>Leverage: 5 (medium)</li>
+            <li>You can edit details after creating</li>
+          </ul>
+        </div>
+
+        <div class="flex gap-3">
+          <button
+            type="button"
+            class="flex-1 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg font-medium transition-colors"
+            on:click={() => showQuickCapture = false}
+          >
+            Cancel (Esc)
+          </button>
+          <button
+            type="submit"
+            class="flex-1 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg font-medium transition-colors"
+            disabled={!quickTitle.trim()}
+          >
+            Create Task (Enter)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{/if}
 
 <!-- Modals -->
 <LevelUpModal bind:visible={showLevelUp} level={newLevel} onClose={() => showLevelUp = false} />

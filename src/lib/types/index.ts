@@ -175,4 +175,6 @@ export interface AppSettings {
   pomodoroLength: number
   shortBreakLength: number
   longBreakLength: number
+  onboardingCompleted: boolean
+  lastWeeklyReview: string | null
 }

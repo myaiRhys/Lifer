@@ -32,6 +32,7 @@
   $: highLeverageTasks = activeTasks.filter(t => t.leverageScore >= 7)
   $: morningTasks = activeTasks.filter(t => t.isMorningTask)
   $: completedPractices = todaysPractices.filter(p => p.todayCompleted)
+  $: showLeverageWarning = userState && userState.lifetimeLeverageRatio > 0 && userState.last7DaysLeverageRatio < (userState.lifetimeLeverageRatio - 1.5)
 </script>
 
 <div class="max-w-6xl mx-auto">
@@ -101,6 +102,24 @@
         </div>
       </div>
     </div>
+
+    <!-- Leverage Warning -->
+    {#if showLeverageWarning}
+      <div class="bg-orange-900/30 border-l-4 border-orange-500 rounded-lg p-4 mb-6">
+        <div class="flex items-start gap-3">
+          <div class="text-2xl">⚠️</div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-orange-400 mb-1">Leverage Slipping</h3>
+            <p class="text-sm text-slate-300 mb-2">
+              Your 7-day leverage ratio ({userState.last7DaysLeverageRatio.toFixed(1)}) is significantly lower than your lifetime average ({userState.lifetimeLeverageRatio.toFixed(1)}).
+            </p>
+            <p class="text-sm text-slate-400">
+              Focus on high-leverage tasks (7+) to get back on track. Are you getting stuck in busy work?
+            </p>
+          </div>
+        </div>
+      </div>
+    {/if}
 
     <!-- Stats Bars -->
     <div class="bg-slate-800 border border-slate-700 rounded-lg p-4 mb-6">
