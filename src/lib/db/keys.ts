@@ -9,5 +9,6 @@ export const KEYS = {
   POWER_UPS: 'powerUps',
   SETTINGS: 'settings',
   FOCUS_SESSIONS: 'focusSessions',
-  RECURRING_TASKS: 'recurringTasks'
+  RECURRING_TASKS: 'recurringTasks',
+  CHORES: 'chores'
 } as const

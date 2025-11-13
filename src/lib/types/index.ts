@@ -81,11 +81,30 @@ export interface Practice {
   scheduleDays?: number[]
   createdAt: string
   lastCompletedAt?: string
+  // Extended fields from RecurringTasks merge
+  leverageScore?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
+  outcomeId?: string
+  isMorningTask?: boolean
+}
+
+export interface Chore {
+  id: string
+  title: string
+  description?: string
+  category?: string
+  completed: boolean
+  completedAt?: string
+  xpReward: number
+  recurring: boolean
+  frequency?: 'daily' | 'weekly' | 'monthly' | 'custom'
+  customDays?: number[]
+  lastReset?: string
+  createdAt: string
 }
 
 export interface HistoryRecord {
   id: string
-  type: "task" | "practice" | "outcome"
+  type: "task" | "practice" | "outcome" | "chore"
   entityId: string
   entitySnapshot: object
   completedAt: string
@@ -95,6 +114,7 @@ export interface HistoryRecord {
   habitStrength?: number
   practiceType?: "positive" | "negative"
   slipOccurred?: boolean
+  choreCategory?: string
   dayOfWeek: number
   hourOfDay: number
 }

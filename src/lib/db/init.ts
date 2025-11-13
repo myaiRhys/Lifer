@@ -1,6 +1,6 @@
 import { get, set } from 'idb-keyval'
 import { KEYS } from './keys'
-import type { UserState, Practice } from '../types'
+import type { UserState, Practice, RecurringTaskTemplate } from '../types'
 
 export const CORE_PRACTICES: Omit<Practice, 'id' | 'habitStrength' | 'currentStreak' | 'longestStreak' | 'todayValue' | 'todayCompleted' | 'lastLoggedAt' | 'createdAt'>[] = [
   {
@@ -106,6 +106,42 @@ function generateUUID(): string {
   return crypto.randomUUID()
 }
 
+async function migrateRecurringTasksToPractices() {
+  const recurringTasks: RecurringTaskTemplate[] = await get(KEYS.RECURRING_TASKS) || []
+  if (recurringTasks.length === 0) return
+
+  const practices: Practice[] = await get(KEYS.PRACTICES) || []
+
+  // Convert recurring tasks to practices
+  const migratedPractices: Practice[] = recurringTasks.map(template => ({
+    id: generateUUID(),
+    name: template.title,
+    description: template.description,
+    type: "positive" as const,
+    target: 1,
+    unit: "completion",
+    habitStrength: 0,
+    currentStreak: 0,
+    longestStreak: 0,
+    todayValue: 0,
+    todayCompleted: false,
+    lastLoggedAt: new Date().toISOString(),
+    frequency: "daily" as const,
+    createdAt: template.createdAt,
+    leverageScore: template.leverageScore,
+    outcomeId: template.outcomeId,
+    isMorningTask: template.isMorningTask
+  }))
+
+  // Add migrated practices to existing ones
+  await set(KEYS.PRACTICES, [...practices, ...migratedPractices])
+
+  // Clear recurring tasks (migration complete)
+  await set(KEYS.RECURRING_TASKS, [])
+
+  console.log(`Migrated ${recurringTasks.length} recurring tasks to practices`)
+}
+
 export async function initializeStorage() {
   let userState = await get(KEYS.USER_STATE)
 
@@ -156,8 +192,8 @@ export async function initializeStorage() {
   if (!await get(KEYS.OUTCOMES)) await set(KEYS.OUTCOMES, [])
   if (!await get(KEYS.HISTORY)) await set(KEYS.HISTORY, [])
   if (!await get(KEYS.RECURRING_TASKS)) await set(KEYS.RECURRING_TASKS, [])
+  if (!await get(KEYS.CHORES)) await set(KEYS.CHORES, [])
 
-  // Spawn today's recurring tasks
-  const { spawnTodaysRecurringTasks } = await import('./recurringTasks')
-  await spawnTodaysRecurringTasks()
+  // Migrate recurring tasks to practices (one-time migration)
+  await migrateRecurringTasksToPractices()
 }

@@ -86,6 +86,19 @@ export async function completeTask(id: string, xpEarned: number): Promise<Task |
   return updated
 }
 
+export async function uncompleteTask(id: string): Promise<Task | null> {
+  const task = await getTaskById(id)
+  if (!task || !task.completed) return null
+
+  const updated = await updateTask(id, {
+    completed: false,
+    completedAt: undefined,
+    xpEarned: undefined
+  })
+
+  return updated
+}
+
 export async function getActiveTasks(): Promise<Task[]> {
   const tasks = await getTasks()
   return tasks.filter(t => !t.completed)
