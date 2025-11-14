@@ -17,7 +17,8 @@
     getCriticalPractices,
     getCurrentMorningSession,
     getMorningWindowTimeRemaining,
-    getGatewayAnalytics
+    getGatewayAnalytics,
+    checkLowAuthenticityAlert
   } from '../lib/db'
   import DailyChallenges from './DailyChallenges.svelte'
   import type { UserState, Task, Practice, Chore, Identity, IdentityAlignment, MorningSession } from '../lib/types'
@@ -43,6 +44,11 @@
     overallGatewayPercentage: number
     streaksSavedByGateway: number
   } | null = null
+  let authenticityAlert: {
+    shouldAlert: boolean
+    consecutiveLowDays: number
+    lastLowScores: number[]
+  } | null = null
 
   onMount(async () => {
     await loadDashboard()
@@ -62,6 +68,7 @@
       morningTimeRemaining = await getMorningWindowTimeRemaining()
     }
     gatewayAnalytics = await getGatewayAnalytics()
+    authenticityAlert = await checkLowAuthenticityAlert()
   }
 
   async function handleTaskToggle(task: Task) {
@@ -158,6 +165,31 @@
             class="inline-block px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded transition-colors"
           >
             Go to Morning Ritual →
+          </a>
+        </div>
+      </div>
+    </div>
+  {/if}
+
+  <!-- Authenticity Alert -->
+  {#if authenticityAlert?.shouldAlert}
+    <div class="bg-gradient-to-r from-purple-900/30 to-pink-900/30 border-2 border-purple-600 rounded-lg p-4 mb-6 animate-pulse">
+      <div class="flex items-start gap-3">
+        <span class="text-3xl">🌿</span>
+        <div class="flex-1">
+          <h3 class="text-lg font-bold text-purple-300 mb-1">Low Authenticity Alert: {authenticityAlert.consecutiveLowDays} Days Below Threshold</h3>
+          <p class="text-sm text-purple-200 mb-2">
+            Your authenticity scores have been below 7 for {authenticityAlert.consecutiveLowDays} consecutive days (recent scores: {authenticityAlert.lastLowScores.join(', ')}). This may indicate you're pushing yourself beyond your authentic limits.
+          </p>
+          <p class="text-xs text-purple-300 mb-3 italic">
+            "When we deny our authentic self, our body keeps the score." - Gabor Maté
+          </p>
+          <a
+            href="#"
+            on:click|preventDefault={() => window.location.hash = 'authenticity'}
+            class="inline-block px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded transition-colors"
+          >
+            Check In With Yourself →
           </a>
         </div>
       </div>

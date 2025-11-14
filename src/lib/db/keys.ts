@@ -32,5 +32,7 @@ export const KEYS = {
   CURRENT_MORNING_SESSION: 'currentMorningSession',
   // Habit Stacking (James Clear)
   HABIT_STACKS: 'habitStacks',
-  HABIT_STACK_COMPLETIONS: 'habitStackCompletions'
+  HABIT_STACK_COMPLETIONS: 'habitStackCompletions',
+  // Authenticity Tracker (Gabor Maté)
+  AUTHENTICITY_LOGS: 'authenticityLogs'
 } as const
