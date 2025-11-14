@@ -24,6 +24,7 @@
   import MorningSovereignty from './components/MorningSovereignty.svelte'
   import TwoMinuteGateway from './components/TwoMinuteGateway.svelte'
   import HabitStackBuilder from './components/HabitStackBuilder.svelte'
+  import AuthenticityTracker from './components/AuthenticityTracker.svelte'
   import { initializeStorage, getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
   import { notificationSystem } from './lib/notifications'
@@ -217,6 +218,12 @@
         on:click={() => currentView = 'stacking'}
       >
         🔗 Stacking
+      </button>
+      <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'authenticity' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'authenticity'}
+      >
+        🌿 Authenticity
       </button>
       <button
         class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'prioritizer' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
@@ -473,6 +480,8 @@
       <TwoMinuteGateway />
     {:else if currentView === 'stacking'}
       <HabitStackBuilder />
+    {:else if currentView === 'authenticity'}
+      <AuthenticityTracker />
     {:else if currentView === 'prioritizer'}
       <TaskPrioritizer />
     {:else if currentView === 'focus'}

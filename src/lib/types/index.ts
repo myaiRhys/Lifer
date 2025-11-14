@@ -57,6 +57,8 @@ export interface Task {
     satisfying: { score: number; reward?: string }
     totalScore: number
   }
+  // Authenticity (Gabor Maté)
+  flowState?: 'flowing' | 'forced' // Green (aligned) or red (pushing)
 }
 
 export interface RecurringTaskTemplate {
@@ -123,6 +125,8 @@ export interface Practice {
   lastCompletionType?: 'gateway' | 'intermediate' | 'full'
   gatewayCount?: number // How many times completed gateway version
   fullCount?: number // How many times completed full version
+  // Authenticity (Gabor Maté)
+  flowState?: 'flowing' | 'forced' // Green (aligned) or red (pushing)
 }
 
 export interface Chore {
@@ -438,6 +442,17 @@ export interface HabitStackCompletion {
   completedLinks: string[] // Array of practiceIds completed
   fullChainCompleted: boolean
   timestamp: string
+}
+
+// Authenticity Tracker (Gabor Maté)
+export interface AuthenticityLog {
+  id: string
+  date: string // YYYY-MM-DD
+  score: number // 1-10: How true to myself was I today?
+  boundariesHonored: number // Times said "no" to protect energy
+  bodySignals: string[] // Physical symptoms as wisdom
+  notes?: string // Optional reflection
+  createdAt: string
 }
 
 export type Theme = "dark" | "light" | "ocean" | "fire" | "forest" | "sunset" | "military" | "cowboy" | "academic" | "cyberpunk" | "zen"
