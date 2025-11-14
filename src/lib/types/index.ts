@@ -49,6 +49,14 @@ export interface Task {
   createdAt: string
   isRecurring: boolean
   recurringTemplateId?: string
+  // Four Laws of Behavior Change (James Clear)
+  fourLaws?: {
+    obvious: { score: number; cue?: string; time?: string; location?: string }
+    attractive: { score: number; bundle?: string }
+    easy: { score: number; frictionSteps: number; gateway?: string }
+    satisfying: { score: number; reward?: string }
+    totalScore: number
+  }
 }
 
 export interface RecurringTaskTemplate {
@@ -60,6 +68,14 @@ export interface RecurringTaskTemplate {
   isMorningTask: boolean
   active: boolean
   createdAt: string
+  // Four Laws of Behavior Change (James Clear)
+  fourLaws?: {
+    obvious: { score: number; cue?: string; time?: string; location?: string }
+    attractive: { score: number; bundle?: string }
+    easy: { score: number; frictionSteps: number; gateway?: string }
+    satisfying: { score: number; reward?: string }
+    totalScore: number
+  }
 }
 
 export interface Practice {
@@ -85,6 +101,14 @@ export interface Practice {
   leverageScore?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
   outcomeId?: string
   isMorningTask?: boolean
+  // Four Laws of Behavior Change (James Clear)
+  fourLaws?: {
+    obvious: { score: number; cue?: string; time?: string; location?: string }
+    attractive: { score: number; bundle?: string }
+    easy: { score: number; frictionSteps: number; gateway?: string }
+    satisfying: { score: number; reward?: string }
+    totalScore: number
+  }
 }
 
 export interface Chore {
