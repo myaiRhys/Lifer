@@ -178,145 +178,176 @@
   </header>
 
   <nav class="bg-slate-800 border-b border-slate-700 p-2">
-    <div class="flex gap-2 max-w-7xl mx-auto overflow-x-auto">
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'dashboard' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'dashboard'}
-      >
-        📊 Dashboard
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'tasks' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'tasks'}
-      >
-        ✅ Tasks
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'identity' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'identity'}
-      >
-        🎯 Identity
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'recovery' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'recovery'}
-      >
-        🔥 Recovery
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'morning' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'morning'}
-      >
-        ☀️ Morning
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'gateway' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'gateway'}
-      >
-        ⚡ Gateway
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'stacking' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'stacking'}
-      >
-        🔗 Stacking
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'authenticity' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'authenticity'}
-      >
-        🌿 Authenticity
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'marginal-gains' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'marginal-gains'}
-      >
-        📈 Marginal Gains
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'maker-mode' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'maker-mode'}
-      >
-        ⚙️ Maker/Manager
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'prioritizer' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'prioritizer'}
-      >
-        🤖 AI Prioritizer
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'focus' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'focus'}
-      >
-        ⏱️ Pomodoro
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'ultradian' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'ultradian'}
-      >
-        🧠 Ultradian
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'energy' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'energy'}
-      >
-        ⚡ Energy & BPT
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'outcome-tree' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'outcome-tree'}
-      >
-        🌳 Outcome Trees
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'couples' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'couples'}
-      >
-        💑 Pair Lifers
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'bodydoubling' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'bodydoubling'}
-      >
-        👥 Body Doubling
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'analytics' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'analytics'}
-      >
-        📈 Analytics
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'chores' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'chores'}
-      >
-        🏠 Chores
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'practices' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'practices'}
-      >
-        ♻️ Practices
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'heatmap' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'heatmap'}
-      >
-        📅 Activity Map
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'shop' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'shop'}
-      >
-        🛒 Power-Ups
-      </button>
-      <button
-        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'outcomes' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-        on:click={() => currentView = 'outcomes'}
-      >
-        🎯 Outcomes (v1)
-      </button>
+    <div class="max-w-7xl mx-auto overflow-x-auto">
+      <!-- Primary Navigation Row -->
+      <div class="flex gap-2 mb-2">
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'dashboard' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'dashboard'}
+        >
+          📊 Dashboard
+        </button>
+
+        <!-- Section Divider -->
+        <div class="border-r border-slate-600 mx-1"></div>
+
+        <!-- ACTION / INPUT SECTION -->
+        <span class="px-2 py-2 text-xs text-slate-500 font-semibold uppercase self-center">Input</span>
+
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'tasks' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'tasks'}
+        >
+          ✅ Tasks
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'practices' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'practices'}
+        >
+          ♻️ Practices
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'chores' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'chores'}
+        >
+          🏠 Chores
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'morning' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'morning'}
+        >
+          ☀️ Morning
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'identity' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'identity'}
+        >
+          🎯 Identity
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'outcomes' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'outcomes'}
+        >
+          🎯 Outcomes
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'outcome-tree' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'outcome-tree'}
+        >
+          🌳 Trees
+        </button>
+
+        <!-- Section Divider -->
+        <div class="border-r border-slate-600 mx-1"></div>
+
+        <!-- WORK / FOCUS SECTION -->
+        <span class="px-2 py-2 text-xs text-slate-500 font-semibold uppercase self-center">Focus</span>
+
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'focus' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'focus'}
+        >
+          ⏱️ Pomodoro
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'ultradian' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'ultradian'}
+        >
+          🧠 Ultradian
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'bodydoubling' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'bodydoubling'}
+        >
+          👥 Doubling
+        </button>
+      </div>
+
+      <!-- Secondary Navigation Row - ANALYTICS / REPORTS -->
+      <div class="flex gap-2">
+        <!-- ANALYTICS / REPORTS SECTION -->
+        <span class="px-2 py-2 text-xs text-orange-500 font-semibold uppercase self-center">Reports</span>
+
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'analytics' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'analytics'}
+        >
+          📈 Analytics
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'heatmap' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'heatmap'}
+        >
+          📅 Activity Map
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'recovery' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'recovery'}
+        >
+          🔥 Recovery
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'gateway' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'gateway'}
+        >
+          ⚡ Gateway
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'stacking' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'stacking'}
+        >
+          🔗 Stacking
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'authenticity' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'authenticity'}
+        >
+          🌿 Authenticity
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'marginal-gains' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'marginal-gains'}
+        >
+          📈 Marginal Gains
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'maker-mode' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'maker-mode'}
+        >
+          ⚙️ Maker/Manager
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'energy' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'energy'}
+        >
+          ⚡ Energy & BPT
+        </button>
+
+        <!-- Section Divider -->
+        <div class="border-r border-slate-600 mx-1"></div>
+
+        <!-- TOOLS SECTION -->
+        <span class="px-2 py-2 text-xs text-green-500 font-semibold uppercase self-center">Tools</span>
+
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'prioritizer' ? 'bg-slate-700 text-green-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'prioritizer'}
+        >
+          🤖 AI Prioritizer
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'couples' ? 'bg-slate-700 text-green-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'couples'}
+        >
+          💑 Pair Lifers
+        </button>
+        <button
+          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'shop' ? 'bg-slate-700 text-green-400' : 'hover:bg-slate-700'}"
+          on:click={() => currentView = 'shop'}
+        >
+          🛒 Power-Ups
+        </button>
+      </div>
     </div>
   </nav>
 
