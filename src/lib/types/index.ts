@@ -410,6 +410,36 @@ export interface MorningStats {
   last7DaysUtilization: number
 }
 
+// Habit Stacking (James Clear)
+export interface HabitStackLink {
+  practiceId: string
+  order: number
+  transitionTime?: number // Seconds between this and next habit
+}
+
+export interface HabitStack {
+  id: string
+  name: string
+  description?: string
+  chain: HabitStackLink[]
+  isActive: boolean
+  completionRate: number // 0-100
+  totalCompletions: number
+  lastCompleted?: string // ISO timestamp
+  createdAt: string
+  lastUpdated: string
+}
+
+export interface HabitStackCompletion {
+  id: string
+  stackId: string
+  stackName: string
+  date: string // YYYY-MM-DD
+  completedLinks: string[] // Array of practiceIds completed
+  fullChainCompleted: boolean
+  timestamp: string
+}
+
 export type Theme = "dark" | "light" | "ocean" | "fire" | "forest" | "sunset" | "military" | "cowboy" | "academic" | "cyberpunk" | "zen"
 
 export interface AppSettings {

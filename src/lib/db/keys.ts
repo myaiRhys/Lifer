@@ -29,5 +29,8 @@ export const KEYS = {
   // Morning Sovereignty Ritual
   MORNING_SESSIONS: 'morningSessions',
   MORNING_RITUAL: 'morningRitual',
-  CURRENT_MORNING_SESSION: 'currentMorningSession'
+  CURRENT_MORNING_SESSION: 'currentMorningSession',
+  // Habit Stacking (James Clear)
+  HABIT_STACKS: 'habitStacks',
+  HABIT_STACK_COMPLETIONS: 'habitStackCompletions'
 } as const

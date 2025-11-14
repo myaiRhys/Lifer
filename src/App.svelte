@@ -23,6 +23,7 @@
   import NeverMissTwice from './components/NeverMissTwice.svelte'
   import MorningSovereignty from './components/MorningSovereignty.svelte'
   import TwoMinuteGateway from './components/TwoMinuteGateway.svelte'
+  import HabitStackBuilder from './components/HabitStackBuilder.svelte'
   import { initializeStorage, getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
   import { notificationSystem } from './lib/notifications'
@@ -210,6 +211,12 @@
         on:click={() => currentView = 'gateway'}
       >
         ⚡ Gateway
+      </button>
+      <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'stacking' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'stacking'}
+      >
+        🔗 Stacking
       </button>
       <button
         class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'prioritizer' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
@@ -464,6 +471,8 @@
       <MorningSovereignty />
     {:else if currentView === 'gateway'}
       <TwoMinuteGateway />
+    {:else if currentView === 'stacking'}
+      <HabitStackBuilder />
     {:else if currentView === 'prioritizer'}
       <TaskPrioritizer />
     {:else if currentView === 'focus'}
