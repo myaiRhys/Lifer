@@ -152,112 +152,125 @@
 </script>
 
 <div class="min-h-screen bg-slate-900 text-white">
-  <header class="bg-slate-800 border-b border-slate-700 p-4">
-    <div class="flex items-center justify-between max-w-7xl mx-auto">
-      <h1 class="text-2xl font-bold">🎯 Lifer</h1>
+  <!-- Enhanced Header with Glassmorphism -->
+  <header class="sticky top-0 z-40 bg-slate-800/95 backdrop-blur-lg border-b border-slate-700/50 shadow-lg">
+    <div class="flex items-center justify-between h-16 px-6 max-w-7xl mx-auto">
+      <!-- Logo/Brand -->
       <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+          <span class="text-xl font-bold">🎯</span>
+        </div>
+        <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          Lifer
+        </h1>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2">
         <!-- Sound Toggle -->
         {#if settings}
           <button
-            class="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 transition-colors"
+            class="w-10 h-10 rounded-lg bg-slate-700/50 hover:bg-slate-600 backdrop-blur transition-all hover:scale-105 flex items-center justify-center"
             on:click={toggleSound}
             title="Toggle Sound"
           >
-            {settings.soundEnabled ? '🔊' : '🔇'}
+            <span class="text-lg">{settings.soundEnabled ? '🔊' : '🔇'}</span>
           </button>
         {/if}
 
         <!-- Settings Button -->
         <button
-          class="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 transition-colors"
+          class="px-4 py-2 rounded-lg bg-slate-700/50 hover:bg-slate-600 backdrop-blur transition-all hover:scale-105 flex items-center gap-2 font-medium"
           on:click={() => showSettings = !showSettings}
         >
-          ⚙️ Settings
+          <span class="text-lg">⚙️</span>
+          <span class="hidden sm:inline">Settings</span>
         </button>
       </div>
     </div>
   </header>
 
-  <nav class="bg-slate-800 border-b border-slate-700 p-2">
-    <div class="max-w-7xl mx-auto overflow-x-auto">
+  <!-- Enhanced Navigation with Better Styling -->
+  <nav class="sticky top-16 z-30 bg-slate-800/95 backdrop-blur-lg border-b border-slate-700/50 shadow-md">
+    <div class="max-w-7xl mx-auto overflow-x-auto px-4">
       <!-- Primary Navigation Row -->
-      <div class="flex gap-2 mb-2">
+      <div class="flex gap-2 py-3 border-b border-slate-700/30">
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'dashboard' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'dashboard' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'dashboard'}
         >
           📊 Dashboard
         </button>
 
         <!-- Section Divider -->
-        <div class="border-r border-slate-600 mx-1"></div>
+        <div class="border-r border-slate-600 mx-2 self-stretch"></div>
 
         <!-- ACTION / INPUT SECTION -->
-        <span class="px-2 py-2 text-xs text-slate-500 font-semibold uppercase self-center">Input</span>
+        <span class="px-3 py-2 text-xs text-blue-400 font-bold uppercase self-center tracking-wider">Input</span>
 
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'tasks' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'tasks' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'tasks'}
         >
           ✅ Tasks
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'practices' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'practices' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'practices'}
         >
           ♻️ Practices
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'chores' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'chores' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'chores'}
         >
           🏠 Chores
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'morning' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'morning' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'morning'}
         >
           ☀️ Morning
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'identity' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'identity' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'identity'}
         >
           🎯 Identity
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'outcomes' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'outcomes' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'outcomes'}
         >
           🎯 Outcomes
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'outcome-tree' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'outcome-tree' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'outcome-tree'}
         >
           🌳 Trees
         </button>
 
         <!-- Section Divider -->
-        <div class="border-r border-slate-600 mx-1"></div>
+        <div class="border-r border-slate-600 mx-2 self-stretch"></div>
 
         <!-- WORK / FOCUS SECTION -->
-        <span class="px-2 py-2 text-xs text-slate-500 font-semibold uppercase self-center">Focus</span>
+        <span class="px-3 py-2 text-xs text-blue-400 font-bold uppercase self-center tracking-wider">Focus</span>
 
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'focus' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
-          on:click={() => currentView = 'focus'}
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'focus' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
+          on:click={() => currentView === 'focus'}
         >
           ⏱️ Pomodoro
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'ultradian' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'ultradian' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'ultradian'}
         >
           🧠 Ultradian
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'bodydoubling' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'bodydoubling' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'bodydoubling'}
         >
           👥 Doubling
@@ -265,85 +278,85 @@
       </div>
 
       <!-- Secondary Navigation Row - ANALYTICS / REPORTS -->
-      <div class="flex gap-2">
+      <div class="flex gap-2 py-3">
         <!-- ANALYTICS / REPORTS SECTION -->
-        <span class="px-2 py-2 text-xs text-orange-500 font-semibold uppercase self-center">Reports</span>
+        <span class="px-3 py-2 text-xs text-orange-400 font-bold uppercase self-center tracking-wider">Reports</span>
 
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'analytics' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'analytics' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'analytics'}
         >
           📈 Analytics
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'heatmap' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'heatmap' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'heatmap'}
         >
           📅 Activity Map
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'recovery' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'recovery' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'recovery'}
         >
           🔥 Recovery
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'gateway' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'gateway' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'gateway'}
         >
           ⚡ Gateway
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'stacking' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'stacking' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'stacking'}
         >
           🔗 Stacking
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'authenticity' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'authenticity' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'authenticity'}
         >
           🌿 Authenticity
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'marginal-gains' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'marginal-gains' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'marginal-gains'}
         >
           📈 Marginal Gains
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'maker-mode' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'maker-mode' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'maker-mode'}
         >
           ⚙️ Maker/Manager
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'energy' ? 'bg-slate-700 text-orange-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'energy' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'energy'}
         >
           ⚡ Energy & BPT
         </button>
 
         <!-- Section Divider -->
-        <div class="border-r border-slate-600 mx-1"></div>
+        <div class="border-r border-slate-600 mx-2 self-stretch"></div>
 
         <!-- TOOLS SECTION -->
-        <span class="px-2 py-2 text-xs text-green-500 font-semibold uppercase self-center">Tools</span>
+        <span class="px-3 py-2 text-xs text-green-400 font-bold uppercase self-center tracking-wider">Tools</span>
 
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'prioritizer' ? 'bg-slate-700 text-green-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'prioritizer' ? 'bg-green-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'prioritizer'}
         >
           🤖 AI Prioritizer
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'couples' ? 'bg-slate-700 text-green-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'couples' ? 'bg-green-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'couples'}
         >
           💑 Pair Lifers
         </button>
         <button
-          class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'shop' ? 'bg-slate-700 text-green-400' : 'hover:bg-slate-700'}"
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'shop' ? 'bg-green-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
           on:click={() => currentView = 'shop'}
         >
           🛒 Power-Ups
