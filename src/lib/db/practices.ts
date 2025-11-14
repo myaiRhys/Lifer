@@ -141,3 +141,128 @@ export async function logPractice(id: string, value: number): Promise<Practice |
 
   return updatedResult
 }
+
+// Log practice with gateway completion option (2-Minute Rule)
+export async function logPracticeGateway(id: string, completionType: 'gateway' | 'full'): Promise<Practice | null> {
+  const practice = await getPracticeById(id)
+  if (!practice) return null
+
+  // Determine value based on completion type
+  let value: number
+  if (completionType === 'gateway' && practice.gatewayVersion) {
+    value = practice.gatewayVersion.target
+  } else {
+    value = practice.target
+  }
+
+  // Update gateway/full counts
+  const gatewayCount = (practice.gatewayCount || 0) + (completionType === 'gateway' ? 1 : 0)
+  const fullCount = (practice.fullCount || 0) + (completionType === 'full' ? 1 : 0)
+
+  // Update practice with completion type tracking
+  await updatePractice(id, {
+    lastCompletionType: completionType,
+    gatewayCount,
+    fullCount
+  })
+
+  // Use regular logPractice for streak/strength logic
+  return await logPractice(id, value)
+}
+
+// Get gateway stats for a practice
+export interface GatewayStats {
+  totalCompletions: number
+  gatewayCompletions: number
+  fullCompletions: number
+  gatewayPercentage: number
+  lastCompletionType?: 'gateway' | 'intermediate' | 'full'
+}
+
+export async function getPracticeGatewayStats(id: string): Promise<GatewayStats | null> {
+  const practice = await getPracticeById(id)
+  if (!practice) return null
+
+  const gatewayCompletions = practice.gatewayCount || 0
+  const fullCompletions = practice.fullCount || 0
+  const totalCompletions = gatewayCompletions + fullCompletions
+
+  return {
+    totalCompletions,
+    gatewayCompletions,
+    fullCompletions,
+    gatewayPercentage: totalCompletions > 0 ? Math.round((gatewayCompletions / totalCompletions) * 100) : 0,
+    lastCompletionType: practice.lastCompletionType
+  }
+}
+
+// Get overall gateway analytics across all practices
+export async function getGatewayAnalytics(): Promise<{
+  practicesWithGateway: number
+  totalCompletions: number
+  totalGatewayCompletions: number
+  totalFullCompletions: number
+  overallGatewayPercentage: number
+  streaksSavedByGateway: number
+}> {
+  const practices = await getPractices()
+
+  let practicesWithGateway = 0
+  let totalCompletions = 0
+  let totalGatewayCompletions = 0
+  let totalFullCompletions = 0
+  let streaksSavedByGateway = 0
+
+  for (const practice of practices) {
+    if (practice.gatewayVersion) {
+      practicesWithGateway++
+    }
+
+    const gatewayCount = practice.gatewayCount || 0
+    const fullCount = practice.fullCount || 0
+
+    totalGatewayCompletions += gatewayCount
+    totalFullCompletions += fullCount
+    totalCompletions += gatewayCount + fullCount
+
+    // Estimate streaks saved: if current streak > 0 and has gateway completions
+    if (practice.currentStreak > 0 && gatewayCount > 0) {
+      // Conservative estimate: gateway was used on hard days
+      streaksSavedByGateway += Math.min(gatewayCount, Math.floor(practice.currentStreak * 0.3))
+    }
+  }
+
+  return {
+    practicesWithGateway,
+    totalCompletions,
+    totalGatewayCompletions,
+    totalFullCompletions,
+    overallGatewayPercentage: totalCompletions > 0
+      ? Math.round((totalGatewayCompletions / totalCompletions) * 100)
+      : 0,
+    streaksSavedByGateway
+  }
+}
+
+// Set gateway version for a practice
+export async function setPracticeGatewayVersion(
+  id: string,
+  gatewayName: string,
+  gatewayTarget: number,
+  gatewayUnit: string
+): Promise<Practice | null> {
+  return await updatePractice(id, {
+    gatewayVersion: {
+      name: gatewayName,
+      target: gatewayTarget,
+      unit: gatewayUnit
+    }
+  })
+}
+
+// Remove gateway version from a practice
+export async function removePracticeGatewayVersion(id: string): Promise<Practice | null> {
+  return await updatePractice(id, {
+    gatewayVersion: undefined
+  })
+}

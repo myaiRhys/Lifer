@@ -114,6 +114,15 @@ export interface Practice {
   lastMissDate?: string
   recoveryCount?: number // How many times bounced back after a miss
   atRisk?: boolean // True if missed once (warning state)
+  // 2-Minute Rule Gateway (James Clear)
+  gatewayVersion?: {
+    name: string
+    target: number
+    unit: string
+  }
+  lastCompletionType?: 'gateway' | 'intermediate' | 'full'
+  gatewayCount?: number // How many times completed gateway version
+  fullCount?: number // How many times completed full version
 }
 
 export interface Chore {

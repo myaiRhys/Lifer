@@ -22,6 +22,7 @@
   import IdentityBuilder from './components/IdentityBuilder.svelte'
   import NeverMissTwice from './components/NeverMissTwice.svelte'
   import MorningSovereignty from './components/MorningSovereignty.svelte'
+  import TwoMinuteGateway from './components/TwoMinuteGateway.svelte'
   import { initializeStorage, getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
   import { notificationSystem } from './lib/notifications'
@@ -203,6 +204,12 @@
         on:click={() => currentView = 'morning'}
       >
         ☀️ Morning
+      </button>
+      <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'gateway' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'gateway'}
+      >
+        ⚡ Gateway
       </button>
       <button
         class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'prioritizer' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
@@ -455,6 +462,8 @@
       <NeverMissTwice />
     {:else if currentView === 'morning'}
       <MorningSovereignty />
+    {:else if currentView === 'gateway'}
+      <TwoMinuteGateway />
     {:else if currentView === 'prioritizer'}
       <TaskPrioritizer />
     {:else if currentView === 'focus'}

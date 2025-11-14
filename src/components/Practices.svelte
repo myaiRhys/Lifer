@@ -1,12 +1,16 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { getPractices, logPractice } from '../lib/db'
+  import { getPractices, logPractice, logPracticeGateway, setPracticeGatewayVersion, removePracticeGatewayVersion } from '../lib/db'
   import type { Practice } from '../lib/types'
 
   let practices: Practice[] = []
   let selectedPractice: Practice | null = null
   let logValue: number = 0
   let showLogModal = false
+  let showGatewaySetup = false
+  let gatewayName = ''
+  let gatewayTarget = 0
+  let gatewayUnit = ''
 
   onMount(async () => {
     await loadPractices()
@@ -31,6 +35,60 @@
     showLogModal = false
     selectedPractice = null
     logValue = 0
+  }
+
+  async function handleGatewayCompletion(practice: Practice) {
+    if (!practice.gatewayVersion) return
+
+    await logPracticeGateway(practice.id, 'gateway')
+    await loadPractices()
+  }
+
+  async function handleFullCompletion(practice: Practice) {
+    await logPracticeGateway(practice.id, 'full')
+    await loadPractices()
+  }
+
+  function openGatewaySetup(practice: Practice) {
+    selectedPractice = practice
+    if (practice.gatewayVersion) {
+      gatewayName = practice.gatewayVersion.name
+      gatewayTarget = practice.gatewayVersion.target
+      gatewayUnit = practice.gatewayVersion.unit
+    } else {
+      // Suggest gateway version based on practice
+      gatewayName = practice.name.toLowerCase().includes('meditate') ? 'Sit and breathe'
+        : practice.name.toLowerCase().includes('gym') || practice.name.toLowerCase().includes('workout') ? 'Put on workout clothes'
+        : practice.name.toLowerCase().includes('journal') ? 'Write one sentence'
+        : practice.name.toLowerCase().includes('read') ? 'Read one page'
+        : `${practice.name} (2-min version)`
+      gatewayTarget = Math.max(1, Math.floor(practice.target * 0.1)) // 10% of target
+      gatewayUnit = practice.unit
+    }
+    showGatewaySetup = true
+  }
+
+  async function handleSaveGateway() {
+    if (!selectedPractice || !gatewayName.trim()) return
+
+    await setPracticeGatewayVersion(
+      selectedPractice.id,
+      gatewayName.trim(),
+      gatewayTarget,
+      gatewayUnit
+    )
+    await loadPractices()
+
+    showGatewaySetup = false
+    selectedPractice = null
+    gatewayName = ''
+    gatewayTarget = 0
+    gatewayUnit = ''
+  }
+
+  async function handleRemoveGateway(practiceId: string) {
+    await removePracticeGatewayVersion(practiceId)
+    await loadPractices()
   }
 
   function getProgressPercentage(practice: Practice): number {
@@ -122,12 +180,23 @@
                     </span>
                   </div>
                 </div>
-                <button
-                  class="px-4 py-2 rounded-lg font-medium transition-colors {practice.todayCompleted ? 'bg-green-900/30 text-green-400 border border-green-700' : 'bg-blue-600 hover:bg-blue-500 text-white'}"
-                  on:click={() => openLogModal(practice)}
-                >
-                  {practice.todayCompleted ? '✓ Logged' : 'Log'}
-                </button>
+                <div class="flex gap-2">
+                  {#if practice.gatewayVersion && !practice.todayCompleted}
+                    <button
+                      class="px-3 py-2 rounded-lg font-medium transition-colors bg-amber-600 hover:bg-amber-500 text-white text-sm"
+                      on:click={() => handleGatewayCompletion(practice)}
+                      title="Complete 2-minute gateway version"
+                    >
+                      ⚡ 2-Min
+                    </button>
+                  {/if}
+                  <button
+                    class="px-4 py-2 rounded-lg font-medium transition-colors {practice.todayCompleted ? 'bg-green-900/30 text-green-400 border border-green-700' : 'bg-blue-600 hover:bg-blue-500 text-white'}"
+                    on:click={() => practice.todayCompleted ? openLogModal(practice) : handleFullCompletion(practice)}
+                  >
+                    {practice.todayCompleted ? '✓ Logged' : 'Complete'}
+                  </button>
+                </div>
               </div>
 
               <!-- Progress Bar -->
@@ -143,6 +212,40 @@
                   />
                 </div>
               </div>
+
+              <!-- Gateway Version Info -->
+              {#if practice.gatewayVersion}
+                <div class="mb-3 p-2 bg-amber-900/20 border border-amber-700/30 rounded text-xs">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <span class="text-amber-400 font-medium">⚡ 2-Min Version:</span>
+                      <span class="text-slate-300 ml-1">{practice.gatewayVersion.name}</span>
+                    </div>
+                    <button
+                      on:click={() => openGatewaySetup(practice)}
+                      class="text-amber-400 hover:text-amber-300"
+                      title="Edit gateway version"
+                    >
+                      ✏️
+                    </button>
+                  </div>
+                  {#if practice.gatewayCount || practice.fullCount}
+                    <div class="text-slate-400 mt-1">
+                      {practice.gatewayCount || 0} gateway · {practice.fullCount || 0} full
+                    </div>
+                  {/if}
+                </div>
+              {:else}
+                <div class="mb-3">
+                  <button
+                    on:click={() => openGatewaySetup(practice)}
+                    class="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1"
+                  >
+                    <span>⚡</span>
+                    <span>Add 2-minute gateway version</span>
+                  </button>
+                </div>
+              {/if}
 
               <!-- Stats Row -->
               <div class="flex items-center justify-between text-sm pt-3 border-t border-slate-700">
@@ -288,6 +391,97 @@
           on:click={handleLog}
         >
           Save Log
+        </button>
+      </div>
+    </div>
+  </div>
+{/if}
+
+<!-- Gateway Setup Modal -->
+{#if showGatewaySetup && selectedPractice}
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" on:click={() => showGatewaySetup = false}>
+    <div class="bg-slate-800 border-2 border-amber-600 rounded-lg p-6 max-w-lg w-full" on:click|stopPropagation>
+      <h3 class="text-2xl font-bold mb-2">⚡ 2-Minute Gateway Version</h3>
+      <p class="text-sm text-slate-400 mb-4">
+        Create a simplified version that takes 2 minutes or less. This still counts for your streak on tough days!
+      </p>
+
+      <div class="bg-blue-900/20 border border-blue-700/30 rounded p-3 mb-4 text-sm">
+        <div class="font-medium text-blue-300 mb-1">💡 Examples:</div>
+        <ul class="text-slate-300 space-y-1">
+          <li>• "Meditate 20 min" → "Sit and breathe for 2 min"</li>
+          <li>• "Go to gym" → "Put on workout clothes"</li>
+          <li>• "Journal 3 pages" → "Write one sentence"</li>
+          <li>• "Read 30 pages" → "Read one page"</li>
+        </ul>
+      </div>
+
+      <div class="space-y-4 mb-6">
+        <div>
+          <label class="block text-sm font-medium mb-2">Gateway Version Name</label>
+          <input
+            type="text"
+            bind:value={gatewayName}
+            placeholder="e.g., 'Put on running shoes'"
+            class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:border-amber-500"
+            autofocus
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-medium mb-2">Target</label>
+            <input
+              type="number"
+              bind:value={gatewayTarget}
+              min="0"
+              step="0.5"
+              class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:border-amber-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Unit</label>
+            <input
+              type="text"
+              bind:value={gatewayUnit}
+              placeholder="e.g., minutes"
+              class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:border-amber-500"
+            />
+          </div>
+        </div>
+
+        <div class="bg-slate-900 rounded p-3 text-sm">
+          <div class="text-slate-400 mb-1">Full Practice:</div>
+          <div class="font-medium">{selectedPractice.name} ({selectedPractice.target} {selectedPractice.unit})</div>
+          <div class="text-slate-400 mt-2 mb-1">Gateway Version:</div>
+          <div class="font-medium text-amber-400">{gatewayName || '...'} ({gatewayTarget} {gatewayUnit || '...'})</div>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        {#if selectedPractice.gatewayVersion}
+          <button
+            class="px-4 py-2 bg-red-900/30 hover:bg-red-900/50 text-red-400 rounded-lg font-medium transition-colors border border-red-700"
+            on:click={() => {
+              handleRemoveGateway(selectedPractice.id)
+              showGatewaySetup = false
+            }}
+          >
+            Remove Gateway
+          </button>
+        {/if}
+        <button
+          class="flex-1 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg font-medium transition-colors"
+          on:click={() => showGatewaySetup = false}
+        >
+          Cancel
+        </button>
+        <button
+          class="flex-1 py-2 bg-amber-600 hover:bg-amber-500 rounded-lg font-medium transition-colors"
+          on:click={handleSaveGateway}
+          disabled={!gatewayName.trim()}
+        >
+          Save Gateway
         </button>
       </div>
     </div>

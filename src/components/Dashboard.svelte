@@ -16,7 +16,8 @@
     getAtRiskPractices,
     getCriticalPractices,
     getCurrentMorningSession,
-    getMorningWindowTimeRemaining
+    getMorningWindowTimeRemaining,
+    getGatewayAnalytics
   } from '../lib/db'
   import DailyChallenges from './DailyChallenges.svelte'
   import type { UserState, Task, Practice, Chore, Identity, IdentityAlignment, MorningSession } from '../lib/types'
@@ -34,6 +35,14 @@
   let criticalPractices: Practice[] = []
   let morningSession: MorningSession | null = null
   let morningTimeRemaining = 0
+  let gatewayAnalytics: {
+    practicesWithGateway: number
+    totalCompletions: number
+    totalGatewayCompletions: number
+    totalFullCompletions: number
+    overallGatewayPercentage: number
+    streaksSavedByGateway: number
+  } | null = null
 
   onMount(async () => {
     await loadDashboard()
@@ -52,6 +61,7 @@
     if (morningSession) {
       morningTimeRemaining = await getMorningWindowTimeRemaining()
     }
+    gatewayAnalytics = await getGatewayAnalytics()
   }
 
   async function handleTaskToggle(task: Task) {
@@ -368,6 +378,37 @@
     <div class="mb-6">
       <DailyChallenges />
     </div>
+
+    <!-- Gateway Insight -->
+    {#if gatewayAnalytics && gatewayAnalytics.practicesWithGateway > 0}
+      <div class="bg-gradient-to-r from-amber-900/20 to-orange-900/20 border border-amber-700/50 rounded-lg p-4 mb-6">
+        <div class="flex items-start gap-3">
+          <span class="text-2xl">⚡</span>
+          <div class="flex-1">
+            <h3 class="text-lg font-bold text-amber-300 mb-1">2-Minute Gateway Active</h3>
+            <p class="text-sm text-amber-200 mb-2">
+              {#if gatewayAnalytics.streaksSavedByGateway > 0}
+                Gateway versions have helped save ~{gatewayAnalytics.streaksSavedByGateway} days of your streaks.
+              {:else}
+                You have {gatewayAnalytics.practicesWithGateway} practice{gatewayAnalytics.practicesWithGateway > 1 ? 's' : ''} with 2-minute gateway versions set up.
+              {/if}
+              {#if gatewayAnalytics.overallGatewayPercentage > 0}
+                <span class="block mt-1">
+                  Gateway usage: {gatewayAnalytics.overallGatewayPercentage}% ({gatewayAnalytics.totalGatewayCompletions}/{gatewayAnalytics.totalCompletions})
+                </span>
+              {/if}
+            </p>
+            <a
+              href="#"
+              on:click|preventDefault={() => window.location.hash = 'gateway'}
+              class="inline-block px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded text-sm transition-colors"
+            >
+              View Gateway Analytics →
+            </a>
+          </div>
+        </div>
+      </div>
+    {/if}
 
     <!-- Action Grid: Complete Today's Items -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
