@@ -357,6 +357,50 @@ export interface RecoveryEvent {
   timestamp: string
 }
 
+// Morning Sovereignty Ritual
+export interface MorningSession {
+  id: string
+  date: string // YYYY-MM-DD
+  wakeTime: string // ISO timestamp when user marked "I'm awake"
+  windowEndTime: string // wakeTime + 90 minutes
+  ritualCompleted: boolean
+  ritualCompletedAt?: string
+  tasksCompleted: number // How many morning tasks done in window
+  tasksTotal: number // How many morning tasks were scheduled
+  windowUtilization: number // 0-100 percentage
+  leverageScore: number // Sum of all morning task leverage scores
+  windowMaintained: boolean // Did they stay in focus mode?
+  createdAt: string
+}
+
+export interface MorningRitual {
+  id: string
+  steps: MorningRitualStep[]
+  active: boolean
+  createdAt: string
+  lastUpdated: string
+}
+
+export interface MorningRitualStep {
+  id: string
+  title: string
+  description?: string
+  order: number
+  duration?: number // Estimated minutes
+  completed: boolean
+  completedAt?: string
+}
+
+export interface MorningStats {
+  totalMorningSessions: number
+  averageWindowUtilization: number
+  averageTasksCompleted: number
+  averageLeverageScore: number
+  currentStreak: number // Days in a row with morning ritual
+  longestStreak: number
+  last7DaysUtilization: number
+}
+
 export type Theme = "dark" | "light" | "ocean" | "fire" | "forest" | "sunset" | "military" | "cowboy" | "academic" | "cyberpunk" | "zen"
 
 export interface AppSettings {

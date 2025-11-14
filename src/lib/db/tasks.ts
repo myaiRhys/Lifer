@@ -100,6 +100,15 @@ export async function completeTask(id: string, xpEarned: number): Promise<Task |
         context
       )
     }
+
+    // Update morning session if task is a morning task and we're in window
+    if (task.isMorningTask) {
+      const { updateMorningSession, isInMorningWindow } = await import('./morning')
+      const inWindow = await isInMorningWindow()
+      if (inWindow) {
+        await updateMorningSession(task.leverageScore)
+      }
+    }
   }
 
   return updated

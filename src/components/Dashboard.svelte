@@ -14,10 +14,12 @@
     getIdentity,
     getTodayAlignment,
     getAtRiskPractices,
-    getCriticalPractices
+    getCriticalPractices,
+    getCurrentMorningSession,
+    getMorningWindowTimeRemaining
   } from '../lib/db'
   import DailyChallenges from './DailyChallenges.svelte'
-  import type { UserState, Task, Practice, Chore, Identity, IdentityAlignment } from '../lib/types'
+  import type { UserState, Task, Practice, Chore, Identity, IdentityAlignment, MorningSession } from '../lib/types'
 
   let userState: UserState | null = null
   let activeTasks: Task[] = []
@@ -30,6 +32,8 @@
   let todayAlignment: IdentityAlignment | null = null
   let atRiskPractices: Practice[] = []
   let criticalPractices: Practice[] = []
+  let morningSession: MorningSession | null = null
+  let morningTimeRemaining = 0
 
   onMount(async () => {
     await loadDashboard()
@@ -44,6 +48,10 @@
     todayAlignment = await getTodayAlignment()
     atRiskPractices = await getAtRiskPractices()
     criticalPractices = await getCriticalPractices()
+    morningSession = await getCurrentMorningSession()
+    if (morningSession) {
+      morningTimeRemaining = await getMorningWindowTimeRemaining()
+    }
   }
 
   async function handleTaskToggle(task: Task) {
@@ -123,6 +131,28 @@
 
 <div class="max-w-6xl mx-auto">
   <h2 class="text-3xl font-bold mb-6">Dashboard</h2>
+
+  <!-- Morning Window Status -->
+  {#if morningSession}
+    <div class="bg-gradient-to-r from-amber-900/30 to-orange-900/30 border-2 border-amber-600 rounded-lg p-4 mb-6">
+      <div class="flex items-start gap-3">
+        <span class="text-3xl">☀️</span>
+        <div class="flex-1">
+          <h3 class="text-lg font-bold text-amber-300 mb-1">Morning Window Active - {morningTimeRemaining} minutes remaining</h3>
+          <p class="text-sm text-amber-200 mb-2">
+            You've completed {morningSession.tasksCompleted}/{morningSession.tasksTotal} morning tasks ({morningSession.windowUtilization}% utilization)
+          </p>
+          <a
+            href="#"
+            on:click|preventDefault={() => window.location.hash = 'morning'}
+            class="inline-block px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded transition-colors"
+          >
+            Go to Morning Ritual →
+          </a>
+        </div>
+      </div>
+    </div>
+  {/if}
 
   <!-- Never Miss Twice Warnings -->
   {#if criticalPractices.length > 0}
