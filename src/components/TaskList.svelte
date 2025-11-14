@@ -8,6 +8,7 @@
   import type { Task, Achievement } from '../lib/types'
   import LevelUpModal from './LevelUpModal.svelte'
   import AchievementNotification from './AchievementNotification.svelte'
+  import FourLawsOptimizer from './FourLawsOptimizer.svelte'
 
   let tasks: Task[] = []
   let showAddForm = false
@@ -24,6 +25,16 @@
   let isMorningTask = false
   let isRecurring = false
   let outcomeId = 'none'
+
+  // Four Laws optimization
+  let showFourLaws = false
+  let fourLaws: Task['fourLaws'] = {
+    obvious: { score: 5, cue: '', time: '', location: '' },
+    attractive: { score: 5, bundle: '' },
+    easy: { score: 5, frictionSteps: 1, gateway: '' },
+    satisfying: { score: 5, reward: '' },
+    totalScore: 20
+  }
 
   // Quick capture
   let quickTitle = ''
@@ -63,7 +74,8 @@
         description: description.trim() || undefined,
         leverageScore,
         outcomeId,
-        isMorningTask
+        isMorningTask,
+        fourLaws: showFourLaws ? fourLaws : undefined
       })
 
       // Spawn today's instance
@@ -76,7 +88,8 @@
         leverageScore,
         outcomeId,
         isMorningTask,
-        isRecurring: false
+        isRecurring: false,
+        fourLaws: showFourLaws ? fourLaws : undefined
       })
     }
 
@@ -91,7 +104,8 @@
       title: title.trim(),
       description: description.trim() || undefined,
       leverageScore,
-      isMorningTask
+      isMorningTask,
+      fourLaws: showFourLaws ? fourLaws : undefined
     })
 
     resetForm()
@@ -158,6 +172,22 @@
     leverageScore = task.leverageScore
     isMorningTask = task.isMorningTask
     isRecurring = task.isRecurring
+
+    // Load Four Laws data if it exists
+    if (task.fourLaws) {
+      showFourLaws = true
+      fourLaws = task.fourLaws
+    } else {
+      showFourLaws = false
+      fourLaws = {
+        obvious: { score: 5, cue: '', time: '', location: '' },
+        attractive: { score: 5, bundle: '' },
+        easy: { score: 5, frictionSteps: 1, gateway: '' },
+        satisfying: { score: 5, reward: '' },
+        totalScore: 20
+      }
+    }
+
     showAddForm = true
   }
 
@@ -169,6 +199,14 @@
     leverageScore = 5
     isMorningTask = false
     isRecurring = false
+    showFourLaws = false
+    fourLaws = {
+      obvious: { score: 5, cue: '', time: '', location: '' },
+      attractive: { score: 5, bundle: '' },
+      easy: { score: 5, frictionSteps: 1, gateway: '' },
+      satisfying: { score: 5, reward: '' },
+      totalScore: 20
+    }
   }
 
   async function handleQuickCapture() {
@@ -286,6 +324,33 @@
             </p>
           </div>
         </div>
+
+        <!-- Four Laws Optimizer Toggle -->
+        <div class="border-t border-slate-700 pt-4">
+          <button
+            type="button"
+            on:click={() => showFourLaws = !showFourLaws}
+            class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-colors"
+          >
+            <span>⚡</span>
+            <span class="font-medium">{showFourLaws ? 'Hide' : 'Optimize with'} Four Laws</span>
+            <span class="text-xs opacity-75">(James Clear)</span>
+          </button>
+          <p class="text-xs text-slate-400 mt-2">
+            Use behavioral science to make this habit stick. Target: 32/40 points (80%+)
+          </p>
+        </div>
+
+        <!-- Four Laws Optimizer Component -->
+        {#if showFourLaws}
+          <div class="border-t border-slate-700 pt-4">
+            <FourLawsOptimizer
+              bind:fourLaws={fourLaws}
+              habitName={title || 'this task'}
+              on:update={(e) => fourLaws = e.detail}
+            />
+          </div>
+        {/if}
 
         <div class="flex gap-3">
           <button
