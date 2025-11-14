@@ -36,5 +36,9 @@ export const KEYS = {
   // Authenticity Tracker (Gabor Maté)
   AUTHENTICITY_LOGS: 'authenticityLogs',
   // Marginal Gains Visualizer (James Clear)
-  MARGINAL_GAIN_LOGS: 'marginalGainLogs'
+  MARGINAL_GAIN_LOGS: 'marginalGainLogs',
+  // Maker/Manager Mode Toggle (Paul Graham)
+  MAKER_MODE_SESSIONS: 'makerModeSessions',
+  MAKER_MODE_PREFERENCES: 'makerModePreferences',
+  CURRENT_MAKER_MODE: 'currentMakerMode'
 } as const

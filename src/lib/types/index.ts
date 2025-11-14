@@ -476,6 +476,42 @@ export interface MarginalGainStats {
   currentStreak: number // Current consecutive days
 }
 
+// Maker/Manager Mode Toggle (Paul Graham)
+export type MakerMode = 'maker' | 'manager'
+
+export interface MakerModeSession {
+  id: string
+  mode: MakerMode
+  startTime: string // ISO timestamp
+  endTime?: string // ISO timestamp (undefined if active)
+  durationMinutes?: number // Calculated when ended
+  tasksCompleted: number
+  interruptions: number // Number of context switches
+  productivityRating?: number // 1-10 self-rating
+  notes?: string
+}
+
+export interface MakerModePreferences {
+  defaultMode: MakerMode
+  makerBlockDuration: number // Minutes (default 180 = 3 hours)
+  managerSlotDuration: number // Minutes (default 60 = 1 hour)
+  protectMakerTime: boolean // Block notifications during maker mode
+  autoSwitchEnabled: boolean // Auto-switch based on calendar
+  preferredMakerHours: { start: number; end: number }[] // e.g., [{start: 9, end: 12}, {start: 14, end: 17}]
+}
+
+export interface MakerModeStats {
+  totalMakerMinutes: number
+  totalManagerMinutes: number
+  makerSessionsCount: number
+  managerSessionsCount: number
+  avgMakerProductivity: number // Average productivity rating
+  avgManagerProductivity: number
+  totalInterruptions: number
+  deepWorkStreak: number // Consecutive days with 3+ hours of maker time
+  longestMakerBlock: number // Minutes
+}
+
 export type Theme = "dark" | "light" | "ocean" | "fire" | "forest" | "sunset" | "military" | "cowboy" | "academic" | "cyberpunk" | "zen"
 
 export interface AppSettings {
