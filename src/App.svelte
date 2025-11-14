@@ -26,6 +26,7 @@
   import HabitStackBuilder from './components/HabitStackBuilder.svelte'
   import AuthenticityTracker from './components/AuthenticityTracker.svelte'
   import MarginalGainsVisualizer from './components/MarginalGainsVisualizer.svelte'
+  import MakerModeToggle from './components/MakerModeToggle.svelte'
   import { initializeStorage, getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
   import { notificationSystem } from './lib/notifications'
@@ -231,6 +232,12 @@
         on:click={() => currentView = 'marginal-gains'}
       >
         📈 Marginal Gains
+      </button>
+      <button
+        class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'maker-mode' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
+        on:click={() => currentView = 'maker-mode'}
+      >
+        ⚙️ Maker/Manager
       </button>
       <button
         class="px-4 py-2 rounded transition-colors whitespace-nowrap {currentView === 'prioritizer' ? 'bg-slate-700 text-blue-400' : 'hover:bg-slate-700'}"
@@ -491,6 +498,8 @@
       <AuthenticityTracker />
     {:else if currentView === 'marginal-gains'}
       <MarginalGainsVisualizer />
+    {:else if currentView === 'maker-mode'}
+      <MakerModeToggle />
     {:else if currentView === 'prioritizer'}
       <TaskPrioritizer />
     {:else if currentView === 'focus'}
