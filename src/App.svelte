@@ -1,35 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import Dashboard from './components/Dashboard.svelte'
   import DashboardEnhanced from './components/DashboardEnhanced.svelte'
-  import TaskList from './components/TaskList.svelte'
-  import Chores from './components/Chores.svelte'
-  import PowerUpShop from './components/PowerUpShop.svelte'
-  import FocusTimer from './components/FocusTimer.svelte'
-  import HeatMap from './components/HeatMap.svelte'
-  import Practices from './components/Practices.svelte'
-  import Outcomes from './components/Outcomes.svelte'
+  import InputPage from './components/pages/InputPage.svelte'
+  import InsightsPage from './components/pages/InsightsPage.svelte'
+  import ToolsPage from './components/pages/ToolsPage.svelte'
+  import FocusPage from './components/pages/FocusPage.svelte'
   import Onboarding from './components/Onboarding.svelte'
   import WeeklyReview from './components/WeeklyReview.svelte'
-  // v2.0 components
-  import EnergyLogger from './components/EnergyLogger.svelte'
-  import BPTAnalysis from './components/BPTAnalysis.svelte'
-  import UltradianTimer from './components/UltradianTimer.svelte'
-  import CouplesMode from './components/CouplesMode.svelte'
-  import OutcomeTreeView from './components/OutcomeTreeView.svelte'
-  import BodyDoublingView from './components/BodyDoublingView.svelte'
-  import TaskPrioritizer from './components/TaskPrioritizer.svelte'
-  import PersonalAnalytics from './components/PersonalAnalytics.svelte'
-  import IdentityBuilder from './components/IdentityBuilder.svelte'
-  import NeverMissTwice from './components/NeverMissTwice.svelte'
-  import MorningSovereignty from './components/MorningSovereignty.svelte'
-  import TwoMinuteGateway from './components/TwoMinuteGateway.svelte'
-  import HabitStackBuilder from './components/HabitStackBuilder.svelte'
-  import AuthenticityTracker from './components/AuthenticityTracker.svelte'
-  import MarginalGainsVisualizer from './components/MarginalGainsVisualizer.svelte'
-  import MakerModeToggle from './components/MakerModeToggle.svelte'
-  import CookieJar from './components/CookieJar.svelte'
-  import Seasons from './components/Seasons.svelte'
   import PWAInstallPrompt from './components/PWAInstallPrompt.svelte'
   import { initializeStorage, getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
@@ -200,188 +177,48 @@
     </div>
   </header>
 
-  <!-- Enhanced Navigation with DRAMATIC Styling -->
+  <!-- Redesigned Clean Navigation -->
   <nav class="sticky top-18 z-30 bg-slate-900/70 backdrop-blur-2xl border-b border-indigo-500/30 shadow-2xl shadow-indigo-900/20">
-    <div class="max-w-7xl mx-auto overflow-x-auto px-4">
-      <!-- Primary Navigation Row -->
-      <div class="flex gap-3 py-4 border-b border-indigo-500/20">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex gap-3 py-4 justify-center">
         <button
-          class="px-5 py-3 rounded-2xl font-bold transition-all duration-300 whitespace-nowrap {currentView === 'dashboard' ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-2xl shadow-blue-500/50 scale-105 border-2 border-blue-400' : 'bg-slate-800/50 hover:bg-slate-700 hover:scale-105 hover:shadow-xl border-2 border-slate-700 hover:border-blue-500'}"
+          class="flex items-center gap-3 px-6 py-3 rounded-2xl font-bold transition-all duration-300 whitespace-nowrap {currentView === 'dashboard' ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-2xl shadow-blue-500/50 scale-105 border-2 border-blue-400' : 'bg-slate-800/50 hover:bg-slate-700 hover:scale-105 hover:shadow-xl border-2 border-slate-700 hover:border-blue-500'}"
           on:click={() => currentView = 'dashboard'}
         >
-          <span class="text-xl">📊</span> Dashboard
+          <span class="text-2xl">📊</span>
+          <span>Dashboard</span>
         </button>
 
-        <!-- Section Divider -->
-        <div class="w-px bg-gradient-to-b from-transparent via-indigo-500/50 to-transparent mx-2"></div>
-
-        <!-- ACTION / INPUT SECTION -->
-        <span class="px-4 py-3 text-sm text-blue-400 font-black uppercase self-center tracking-widest bg-blue-500/10 rounded-xl border border-blue-500/30">Input</span>
-
         <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'tasks' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'tasks'}
+          class="flex items-center gap-3 px-6 py-3 rounded-2xl font-bold transition-all duration-300 whitespace-nowrap {currentView === 'input' ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-2xl shadow-blue-500/50 scale-105 border-2 border-blue-400' : 'bg-slate-800/50 hover:bg-slate-700 hover:scale-105 hover:shadow-xl border-2 border-slate-700 hover:border-blue-500'}"
+          on:click={() => currentView = 'input'}
         >
-          ✅ Tasks
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'practices' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'practices'}
-        >
-          ♻️ Practices
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'chores' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'chores'}
-        >
-          🏠 Chores
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'morning' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'morning'}
-        >
-          ☀️ Morning
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'identity' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'identity'}
-        >
-          🎯 Identity
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'outcomes' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'outcomes'}
-        >
-          🎯 Outcomes
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'outcome-tree' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'outcome-tree'}
-        >
-          🌳 Trees
+          <span class="text-2xl">📝</span>
+          <span>Input</span>
         </button>
 
-        <!-- Section Divider -->
-        <div class="border-r border-slate-600 mx-2 self-stretch"></div>
-
-        <!-- WORK / FOCUS SECTION -->
-        <span class="px-3 py-2 text-xs text-blue-400 font-bold uppercase self-center tracking-wider">Focus</span>
-
         <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'focus' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView === 'focus'}
+          class="flex items-center gap-3 px-6 py-3 rounded-2xl font-bold transition-all duration-300 whitespace-nowrap {currentView === 'insights' ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-2xl shadow-orange-500/50 scale-105 border-2 border-orange-400' : 'bg-slate-800/50 hover:bg-slate-700 hover:scale-105 hover:shadow-xl border-2 border-slate-700 hover:border-orange-500'}"
+          on:click={() => currentView = 'insights'}
         >
-          ⏱️ Pomodoro
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'ultradian' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'ultradian'}
-        >
-          🧠 Ultradian
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'bodydoubling' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'bodydoubling'}
-        >
-          👥 Doubling
-        </button>
-      </div>
-
-      <!-- Secondary Navigation Row - ANALYTICS / REPORTS -->
-      <div class="flex gap-2 py-3">
-        <!-- ANALYTICS / REPORTS SECTION -->
-        <span class="px-3 py-2 text-xs text-orange-400 font-bold uppercase self-center tracking-wider">Reports</span>
-
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'analytics' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'analytics'}
-        >
-          📈 Analytics
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'heatmap' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'heatmap'}
-        >
-          📅 Activity Map
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'recovery' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'recovery'}
-        >
-          🔥 Recovery
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'gateway' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'gateway'}
-        >
-          ⚡ Gateway
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'stacking' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'stacking'}
-        >
-          🔗 Stacking
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'authenticity' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'authenticity'}
-        >
-          🌿 Authenticity
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'marginal-gains' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'marginal-gains'}
-        >
-          📈 Marginal Gains
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'maker-mode' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'maker-mode'}
-        >
-          ⚙️ Maker/Manager
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'energy' ? 'bg-orange-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'energy'}
-        >
-          ⚡ Energy & BPT
+          <span class="text-2xl">📈</span>
+          <span>Insights</span>
         </button>
 
-        <!-- Section Divider -->
-        <div class="border-r border-slate-600 mx-2 self-stretch"></div>
+        <button
+          class="flex items-center gap-3 px-6 py-3 rounded-2xl font-bold transition-all duration-300 whitespace-nowrap {currentView === 'tools' ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-2xl shadow-green-500/50 scale-105 border-2 border-green-400' : 'bg-slate-800/50 hover:bg-slate-700 hover:scale-105 hover:shadow-xl border-2 border-slate-700 hover:border-green-500'}"
+          on:click={() => currentView = 'tools'}
+        >
+          <span class="text-2xl">🛠️</span>
+          <span>Tools</span>
+        </button>
 
-        <!-- TOOLS SECTION -->
-        <span class="px-3 py-2 text-xs text-green-400 font-bold uppercase self-center tracking-wider">Tools</span>
-
         <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'prioritizer' ? 'bg-green-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'prioritizer'}
+          class="flex items-center gap-3 px-6 py-3 rounded-2xl font-bold transition-all duration-300 whitespace-nowrap {currentView === 'focus' ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-2xl shadow-purple-500/50 scale-105 border-2 border-purple-400' : 'bg-slate-800/50 hover:bg-slate-700 hover:scale-105 hover:shadow-xl border-2 border-slate-700 hover:border-purple-500'}"
+          on:click={() => currentView = 'focus'}
         >
-          🤖 AI Prioritizer
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'couples' ? 'bg-green-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'couples'}
-        >
-          💑 Pair Lifers
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'shop' ? 'bg-green-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'shop'}
-        >
-          🛒 Power-Ups
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'cookie-jar' ? 'bg-green-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'cookie-jar'}
-        >
-          🍪 Cookie Jar
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'seasons' ? 'bg-green-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
-          on:click={() => currentView = 'seasons'}
-        >
-          🌍 Seasons
+          <span class="text-2xl">⚡</span>
+          <span>Focus</span>
         </button>
       </div>
     </div>
@@ -549,57 +386,14 @@
   <main class="p-4 max-w-7xl mx-auto">
     {#if currentView === 'dashboard'}
       <DashboardEnhanced />
-    {:else if currentView === 'tasks'}
-      <TaskList />
-    {:else if currentView === 'identity'}
-      <IdentityBuilder />
-    {:else if currentView === 'recovery'}
-      <NeverMissTwice />
-    {:else if currentView === 'morning'}
-      <MorningSovereignty />
-    {:else if currentView === 'gateway'}
-      <TwoMinuteGateway />
-    {:else if currentView === 'stacking'}
-      <HabitStackBuilder />
-    {:else if currentView === 'authenticity'}
-      <AuthenticityTracker />
-    {:else if currentView === 'marginal-gains'}
-      <MarginalGainsVisualizer />
-    {:else if currentView === 'maker-mode'}
-      <MakerModeToggle />
-    {:else if currentView === 'cookie-jar'}
-      <CookieJar />
-    {:else if currentView === 'seasons'}
-      <Seasons />
-    {:else if currentView === 'prioritizer'}
-      <TaskPrioritizer />
+    {:else if currentView === 'input'}
+      <InputPage />
+    {:else if currentView === 'insights'}
+      <InsightsPage />
+    {:else if currentView === 'tools'}
+      <ToolsPage />
     {:else if currentView === 'focus'}
-      <FocusTimer />
-    {:else if currentView === 'ultradian'}
-      <UltradianTimer />
-    {:else if currentView === 'energy'}
-      <div class="space-y-6">
-        <EnergyLogger />
-        <BPTAnalysis />
-      </div>
-    {:else if currentView === 'outcome-tree'}
-      <OutcomeTreeView />
-    {:else if currentView === 'couples'}
-      <CouplesMode />
-    {:else if currentView === 'bodydoubling'}
-      <BodyDoublingView />
-    {:else if currentView === 'analytics'}
-      <PersonalAnalytics />
-    {:else if currentView === 'chores'}
-      <Chores />
-    {:else if currentView === 'practices'}
-      <Practices />
-    {:else if currentView === 'heatmap'}
-      <HeatMap />
-    {:else if currentView === 'shop'}
-      <PowerUpShop />
-    {:else if currentView === 'outcomes'}
-      <Outcomes />
+      <FocusPage />
     {/if}
   </main>
 
