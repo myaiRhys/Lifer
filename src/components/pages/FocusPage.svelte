@@ -45,25 +45,25 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <div class="space-y-6 animate-page-enter">
-  <!-- Page Header -->
-  <div class="flex items-center justify-between mb-6">
+  <!-- Page Header - Mobile Optimized -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 md:mb-6 gap-3">
     <div>
-      <h1 class="text-5xl font-black bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight tracking-tight mb-3">
+      <h1 class="text-3xl md:text-5xl font-black bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight tracking-tight mb-2 md:mb-3">
         ⚡ Focus
       </h1>
-      <p class="text-slate-300 text-lg">Deep work sessions to maximize productivity</p>
+      <p class="text-slate-300 text-sm md:text-lg">Deep work sessions to maximize productivity</p>
     </div>
-    <div class="text-xs text-slate-500 bg-slate-800/50 px-4 py-2 rounded-xl border border-slate-700/50 hidden md:block">
+    <div class="text-xs text-slate-500 bg-slate-800/50 px-4 py-2 rounded-xl border border-slate-700/50 hidden lg:block">
       <kbd class="font-mono">1-3</kbd> for quick navigation
     </div>
   </div>
 
-  <!-- Mode Selection Cards with enhanced styling -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <!-- Mode Selection Cards with enhanced styling - Touch-optimized -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
     {#each modes as mode}
       <button
         on:click={() => activeMode = mode.id}
-        class="group relative bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-2xl rounded-2xl border transition-all duration-300 p-8 text-left shadow-xl shadow-black/20 {activeMode === mode.id
+        class="group relative bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-2xl rounded-xl md:rounded-2xl border transition-all duration-300 p-6 md:p-8 text-left shadow-xl shadow-black/20 active:scale-95 {activeMode === mode.id
           ? `border-transparent bg-gradient-to-br ${mode.gradient} shadow-2xl shadow-purple-500/30 scale-105`
           : 'border-slate-700/50 hover:border-slate-600 hover:scale-105 hover:shadow-2xl'}"
       >

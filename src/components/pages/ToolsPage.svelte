@@ -72,24 +72,24 @@
 
 <div class="space-y-6 animate-page-enter">
   {#if activeTool === null}
-    <!-- Tools Grid View -->
-    <div class="flex items-center justify-between mb-6">
+    <!-- Tools Grid View - Mobile Optimized -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 md:mb-6 gap-3">
       <div>
-        <h1 class="text-5xl font-black bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 bg-clip-text text-transparent leading-tight tracking-tight mb-3">
+        <h1 class="text-3xl md:text-5xl font-black bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 bg-clip-text text-transparent leading-tight tracking-tight mb-2 md:mb-3">
           🛠️ Tools
         </h1>
-        <p class="text-slate-300 text-lg">Powerful features to optimize your growth</p>
+        <p class="text-slate-300 text-sm md:text-lg">Powerful features to optimize your growth</p>
       </div>
-      <div class="text-xs text-slate-500 bg-slate-800/50 px-4 py-2 rounded-xl border border-slate-700/50 hidden md:block">
+      <div class="text-xs text-slate-500 bg-slate-800/50 px-4 py-2 rounded-xl border border-slate-700/50 hidden lg:block">
         <kbd class="font-mono">1-5</kbd> to open • <kbd class="font-mono">ESC</kbd> to close
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
       {#each tools as tool}
         <button
           on:click={() => activeTool = tool.id}
-          class="group relative bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-2xl rounded-2xl border border-slate-700/50 p-8 text-left hover:scale-105 transition-all duration-300 hover:shadow-2xl shadow-xl shadow-black/20 overflow-hidden"
+          class="group relative bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-2xl rounded-xl md:rounded-2xl border border-slate-700/50 p-6 md:p-8 text-left hover:scale-105 active:scale-95 transition-all duration-300 hover:shadow-2xl shadow-xl shadow-black/20 overflow-hidden"
         >
           <!-- Gradient Background on Hover -->
           <div class="absolute inset-0 bg-gradient-to-br {tool.gradient} opacity-0 group-hover:opacity-15 transition-opacity duration-300"></div>

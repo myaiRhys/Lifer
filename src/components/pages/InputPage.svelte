@@ -34,34 +34,34 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <div class="space-y-6 animate-page-enter">
-  <!-- Page Header -->
-  <div class="flex items-center justify-between mb-6">
+  <!-- Page Header - Mobile Optimized -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 md:mb-6 gap-3">
     <div>
-      <h1 class="text-5xl font-black bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent leading-tight tracking-tight mb-3">
+      <h1 class="text-3xl md:text-5xl font-black bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent leading-tight tracking-tight mb-2 md:mb-3">
         📝 Input
       </h1>
-      <p class="text-slate-300 text-lg">Create tasks, practices, and set your intentions</p>
+      <p class="text-slate-300 text-sm md:text-lg">Create tasks, practices, and set your intentions</p>
     </div>
-    <div class="text-xs text-slate-500 bg-slate-800/50 px-4 py-2 rounded-xl border border-slate-700/50 hidden md:block">
+    <div class="text-xs text-slate-500 bg-slate-800/50 px-4 py-2 rounded-xl border border-slate-700/50 hidden lg:block">
       <kbd class="font-mono">1-7</kbd> for quick navigation
     </div>
   </div>
 
-  <!-- Tab Navigation with enhanced styling -->
-  <div class="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-2xl rounded-2xl border border-slate-700/50 p-2 shadow-xl shadow-black/20">
-    <div class="flex gap-2 overflow-x-auto scrollbar-hide">
+  <!-- Tab Navigation with enhanced styling - Touch-optimized -->
+  <div class="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-2xl rounded-xl md:rounded-2xl border border-slate-700/50 p-1.5 md:p-2 shadow-xl shadow-black/20">
+    <div class="flex gap-1.5 md:gap-2 overflow-x-auto scrollbar-hide">
       {#each tabs as tab}
         <button
           on:click={() => activeTab = tab.id}
-          class="group relative flex items-center gap-2 px-5 py-3 rounded-xl font-bold transition-all duration-300 whitespace-nowrap {activeTab === tab.id
+          class="group relative flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-2.5 md:py-3 rounded-lg md:rounded-xl font-bold transition-all duration-300 whitespace-nowrap active:scale-95 {activeTab === tab.id
             ? `bg-gradient-to-r ${tab.color} text-white shadow-lg shadow-blue-500/30 scale-105`
             : 'bg-slate-800/50 hover:bg-slate-700/70 hover:scale-102 text-slate-300 hover:text-white'}"
         >
           {#if activeTab === tab.id}
-            <div class="absolute inset-0 bg-gradient-to-r {tab.color} rounded-xl blur-lg opacity-40 -z-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-r {tab.color} rounded-lg md:rounded-xl blur-lg opacity-40 -z-10"></div>
           {/if}
-          <span class="text-xl group-hover:scale-110 transition-transform">{tab.icon}</span>
-          <span class="hidden sm:inline">{tab.label}</span>
+          <span class="text-lg md:text-xl group-hover:scale-110 transition-transform">{tab.icon}</span>
+          <span class="text-sm md:text-base hidden sm:inline">{tab.label}</span>
           {#if activeTab !== tab.id}
             <span class="text-xs opacity-40 hidden lg:inline font-mono">({tab.shortcut})</span>
           {/if}
