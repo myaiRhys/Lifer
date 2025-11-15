@@ -40,5 +40,7 @@ export const KEYS = {
   // Maker/Manager Mode Toggle (Paul Graham)
   MAKER_MODE_SESSIONS: 'makerModeSessions',
   MAKER_MODE_PREFERENCES: 'makerModePreferences',
-  CURRENT_MAKER_MODE: 'currentMakerMode'
+  CURRENT_MAKER_MODE: 'currentMakerMode',
+  // Cookie Jar (David Goggins - Mental Toughness)
+  COOKIE_JAR_VICTORIES: 'cookieJarVictories'
 } as const
