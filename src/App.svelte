@@ -29,6 +29,7 @@
   import MarginalGainsVisualizer from './components/MarginalGainsVisualizer.svelte'
   import MakerModeToggle from './components/MakerModeToggle.svelte'
   import CookieJar from './components/CookieJar.svelte'
+  import Seasons from './components/Seasons.svelte'
   import { initializeStorage, getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
   import { notificationSystem } from './lib/notifications'
@@ -375,6 +376,12 @@
         >
           🍪 Cookie Jar
         </button>
+        <button
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'seasons' ? 'bg-green-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
+          on:click={() => currentView = 'seasons'}
+        >
+          🌍 Seasons
+        </button>
       </div>
     </div>
   </nav>
@@ -561,6 +568,8 @@
       <MakerModeToggle />
     {:else if currentView === 'cookie-jar'}
       <CookieJar />
+    {:else if currentView === 'seasons'}
+      <Seasons />
     {:else if currentView === 'prioritizer'}
       <TaskPrioritizer />
     {:else if currentView === 'focus'}

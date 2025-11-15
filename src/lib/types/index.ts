@@ -540,6 +540,42 @@ export interface CookieJarStats {
   currentStrength: number // 1-100: Based on recent victories and retrievals
 }
 
+// Seasons System (Robert Greene - Long-term Cyclical Framework)
+export type Season = 'spring' | 'summer' | 'fall' | 'winter'
+
+export interface SeasonPhase {
+  id: string
+  season: Season
+  startDate: string // ISO timestamp when this season began
+  endDate?: string // ISO timestamp when season ended (undefined if current)
+  theme?: string // Optional theme/focus for this season
+  primaryOutcomes: string[] // Outcome IDs most relevant to this season
+  energyPattern: 'building' | 'peak' | 'harvest' | 'rest' // Characteristic of each season
+  mindset: string // Key mental framework for the season
+  reflectionNotes?: string // Reflections at end of season
+  createdAt: string
+}
+
+export interface SeasonStats {
+  currentSeason: Season
+  daysInCurrentSeason: number
+  totalSeasonsCycled: number
+  seasonHistory: Array<{
+    season: Season
+    startDate: string
+    endDate: string
+    duration: number // days
+    outcomesCompleted: number
+    tasksCompleted: number
+    avgLeverageScore: number
+  }>
+  seasonalPatterns: {
+    mostProductiveSeason?: Season
+    longestSeason?: { season: Season; days: number }
+    avgSeasonDuration: number
+  }
+}
+
 export type Theme = "dark" | "light" | "ocean" | "fire" | "forest" | "sunset" | "military" | "cowboy" | "academic" | "cyberpunk" | "zen"
 
 export interface AppSettings {
