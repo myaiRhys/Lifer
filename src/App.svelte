@@ -151,62 +151,69 @@
   }
 </script>
 
-<div class="min-h-screen bg-slate-900 text-white">
+<div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white relative overflow-x-hidden">
+  <!-- Ambient Glow Effects -->
+  <div class="fixed top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl -z-10"></div>
+  <div class="fixed bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -z-10"></div>
+
   <!-- Enhanced Header with Glassmorphism -->
-  <header class="sticky top-0 z-40 bg-slate-800/95 backdrop-blur-lg border-b border-slate-700/50 shadow-lg">
-    <div class="flex items-center justify-between h-16 px-6 max-w-7xl mx-auto">
+  <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-xl border-b border-indigo-500/20 shadow-2xl shadow-indigo-900/20">
+    <div class="flex items-center justify-between h-18 px-6 max-w-7xl mx-auto">
       <!-- Logo/Brand -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
-          <span class="text-xl font-bold">🎯</span>
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-purple-500/50 animate-pulse border-2 border-white/10">
+          <span class="text-3xl font-bold">🎯</span>
         </div>
-        <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-          Lifer
-        </h1>
+        <div>
+          <h1 class="text-3xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-none">
+            Lifer
+          </h1>
+          <p class="text-xs text-slate-400 font-medium">Atomic Habits System</p>
+        </div>
       </div>
 
       <!-- Actions -->
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-3">
         <!-- Sound Toggle -->
         {#if settings}
           <button
-            class="w-10 h-10 rounded-lg bg-slate-700/50 hover:bg-slate-600 backdrop-blur transition-all hover:scale-105 flex items-center justify-center"
+            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-700 hover:from-blue-600 hover:to-purple-600 backdrop-blur transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-blue-500/50 flex items-center justify-center border-2 border-slate-600 hover:border-blue-400"
             on:click={toggleSound}
             title="Toggle Sound"
           >
-            <span class="text-lg">{settings.soundEnabled ? '🔊' : '🔇'}</span>
+            <span class="text-2xl">{settings.soundEnabled ? '🔊' : '🔇'}</span>
           </button>
         {/if}
 
         <!-- Settings Button -->
         <button
-          class="px-4 py-2 rounded-lg bg-slate-700/50 hover:bg-slate-600 backdrop-blur transition-all hover:scale-105 flex items-center gap-2 font-medium"
+          class="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 backdrop-blur transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50 flex items-center gap-3 font-bold text-lg border-2 border-purple-400/20 hover:border-purple-400"
           on:click={() => showSettings = !showSettings}
         >
-          <span class="text-lg">⚙️</span>
+          <span class="text-2xl">⚙️</span>
           <span class="hidden sm:inline">Settings</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Enhanced Navigation with Better Styling -->
-  <nav class="sticky top-16 z-30 bg-slate-800/95 backdrop-blur-lg border-b border-slate-700/50 shadow-md">
+  <!-- Enhanced Navigation with DRAMATIC Styling -->
+  <nav class="sticky top-18 z-30 bg-slate-900/70 backdrop-blur-2xl border-b border-indigo-500/30 shadow-2xl shadow-indigo-900/20">
     <div class="max-w-7xl mx-auto overflow-x-auto px-4">
       <!-- Primary Navigation Row -->
-      <div class="flex gap-2 py-3 border-b border-slate-700/30">
+      <div class="flex gap-3 py-4 border-b border-indigo-500/20">
         <button
-          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'dashboard' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
+          class="px-5 py-3 rounded-2xl font-bold transition-all duration-300 whitespace-nowrap {currentView === 'dashboard' ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-2xl shadow-blue-500/50 scale-105 border-2 border-blue-400' : 'bg-slate-800/50 hover:bg-slate-700 hover:scale-105 hover:shadow-xl border-2 border-slate-700 hover:border-blue-500'}"
           on:click={() => currentView = 'dashboard'}
         >
-          📊 Dashboard
+          <span class="text-xl">📊</span> Dashboard
         </button>
 
         <!-- Section Divider -->
-        <div class="border-r border-slate-600 mx-2 self-stretch"></div>
+        <div class="w-px bg-gradient-to-b from-transparent via-indigo-500/50 to-transparent mx-2"></div>
 
         <!-- ACTION / INPUT SECTION -->
-        <span class="px-3 py-2 text-xs text-blue-400 font-bold uppercase self-center tracking-wider">Input</span>
+        <span class="px-4 py-3 text-sm text-blue-400 font-black uppercase self-center tracking-widest bg-blue-500/10 rounded-xl border border-blue-500/30">Input</span>
 
         <button
           class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'tasks' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
