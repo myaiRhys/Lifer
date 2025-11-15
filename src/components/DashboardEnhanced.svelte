@@ -18,9 +18,13 @@
     getCurrentMorningSession,
     getMorningWindowTimeRemaining,
     getGatewayAnalytics,
-    checkLowAuthenticityAlert
+    checkLowAuthenticityAlert,
+    getCurrentSeason,
+    checkSeasonTransition,
+    getSeasonEmoji,
+    getSeasonColors
   } from '../lib/db'
-  import type { UserState, Task, Practice, Chore, Identity, IdentityAlignment, MorningSession } from '../lib/types'
+  import type { UserState, Task, Practice, Chore, Identity, IdentityAlignment, MorningSession, SeasonPhase } from '../lib/types'
 
   let userState: UserState | null = null
   let activeTasks: Task[] = []
@@ -37,6 +41,8 @@
   let morningTimeRemaining = 0
   let gatewayAnalytics: any = null
   let authenticityAlert: any = null
+  let currentSeason: SeasonPhase | undefined
+  let seasonTransition: any = null
 
   onMount(async () => {
     await loadDashboard()
@@ -57,6 +63,8 @@
     }
     gatewayAnalytics = await getGatewayAnalytics()
     authenticityAlert = await checkLowAuthenticityAlert()
+    currentSeason = await getCurrentSeason()
+    seasonTransition = await checkSeasonTransition()
   }
 
   async function handleTaskToggle(task: Task) {
@@ -209,6 +217,47 @@
               <span class="text-red-400">↓ {todayAlignment.votesAgainst} votes against</span>
             </div>
           </div>
+        </div>
+      {/if}
+    </div>
+  {/if}
+
+  <!-- Season Indicator Card -->
+  {#if currentSeason}
+    <div class="bg-gradient-to-br {getSeasonColors(currentSeason.season).gradient} rounded-2xl p-6 mb-8 shadow-xl border-2 border-white/30 backdrop-blur-xl relative overflow-hidden">
+      <!-- Glow Effect -->
+      <div class="absolute -inset-1 bg-gradient-to-br {getSeasonColors(currentSeason.season).gradient} rounded-2xl blur-xl opacity-30 -z-10"></div>
+
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-4">
+          <span class="text-5xl drop-shadow-2xl">{getSeasonEmoji(currentSeason.season)}</span>
+          <div>
+            <div class="text-xs text-white/80 uppercase tracking-widest font-black mb-1">Current Season</div>
+            <h3 class="text-2xl font-black text-white capitalize">{currentSeason.season}</h3>
+            {#if currentSeason.theme}
+              <p class="text-white/90 text-sm mt-1">{currentSeason.theme}</p>
+            {:else}
+              <p class="text-white/80 text-sm mt-1 italic">{currentSeason.mindset}</p>
+            {/if}
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="text-xs text-white/70 mb-1">
+            {#if seasonTransition}
+              Day {seasonTransition.daysInSeason}
+            {/if}
+          </div>
+          <div class="text-sm text-white/90 font-bold capitalize">
+            {currentSeason.energyPattern} phase
+          </div>
+        </div>
+      </div>
+
+      {#if seasonTransition && seasonTransition.daysInSeason >= 90}
+        <div class="mt-4 pt-4 border-t border-white/20">
+          <p class="text-white/90 text-sm">
+            ⏰ {seasonTransition.message}
+          </p>
         </div>
       {/if}
     </div>

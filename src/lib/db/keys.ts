@@ -42,5 +42,8 @@ export const KEYS = {
   MAKER_MODE_PREFERENCES: 'makerModePreferences',
   CURRENT_MAKER_MODE: 'currentMakerMode',
   // Cookie Jar (David Goggins - Mental Toughness)
-  COOKIE_JAR_VICTORIES: 'cookieJarVictories'
+  COOKIE_JAR_VICTORIES: 'cookieJarVictories',
+  // Seasons System (Robert Greene - Long-term Cyclical Framework)
+  SEASON_PHASES: 'seasonPhases',
+  CURRENT_SEASON: 'currentSeason'
 } as const
