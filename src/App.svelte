@@ -28,6 +28,7 @@
   import AuthenticityTracker from './components/AuthenticityTracker.svelte'
   import MarginalGainsVisualizer from './components/MarginalGainsVisualizer.svelte'
   import MakerModeToggle from './components/MakerModeToggle.svelte'
+  import CookieJar from './components/CookieJar.svelte'
   import { initializeStorage, getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
   import { notificationSystem } from './lib/notifications'
@@ -368,6 +369,12 @@
         >
           🛒 Power-Ups
         </button>
+        <button
+          class="px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap {currentView === 'cookie-jar' ? 'bg-green-600 text-white shadow-lg scale-105' : 'hover:bg-slate-700 hover:scale-105'}"
+          on:click={() => currentView = 'cookie-jar'}
+        >
+          🍪 Cookie Jar
+        </button>
       </div>
     </div>
   </nav>
@@ -552,6 +559,8 @@
       <MarginalGainsVisualizer />
     {:else if currentView === 'maker-mode'}
       <MakerModeToggle />
+    {:else if currentView === 'cookie-jar'}
+      <CookieJar />
     {:else if currentView === 'prioritizer'}
       <TaskPrioritizer />
     {:else if currentView === 'focus'}

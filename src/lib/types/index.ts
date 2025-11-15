@@ -512,6 +512,34 @@ export interface MakerModeStats {
   longestMakerBlock: number // Minutes
 }
 
+// Cookie Jar (David Goggins - Mental Toughness)
+export type VictoryEmotion = 'proud' | 'relieved' | 'unstoppable' | 'grateful' | 'fierce' | 'calm' | 'energized'
+
+export interface CookieJarVictory {
+  id: string
+  title: string // Brief description of the victory
+  story: string // Detailed emotional context: What you overcame, how you felt
+  emotion: VictoryEmotion // Primary emotion felt during victory
+  difficulty: number // 1-10: How hard was this to achieve?
+  category: 'physical' | 'mental' | 'emotional' | 'professional' | 'relationship' | 'habit'
+  dateAchieved: string // ISO timestamp of when this victory happened
+  sourceType?: 'achievement' | 'task' | 'practice' | 'manual' // Where this victory came from
+  sourceId?: string // ID of source entity (achievement, task, etc.)
+  timesRetrieved: number // How many times you've accessed this for strength
+  lastRetrievedAt?: string // Last time you accessed this victory
+  createdAt: string
+}
+
+export interface CookieJarStats {
+  totalVictories: number
+  totalRetrievals: number // Total times jar has been opened
+  mostRetrievedVictory?: CookieJarVictory
+  victoryByCategory: { category: string; count: number }[]
+  avgDifficulty: number
+  mostCommonEmotion: VictoryEmotion
+  currentStrength: number // 1-100: Based on recent victories and retrievals
+}
+
 export type Theme = "dark" | "light" | "ocean" | "fire" | "forest" | "sunset" | "military" | "cowboy" | "academic" | "cyberpunk" | "zen"
 
 export interface AppSettings {
