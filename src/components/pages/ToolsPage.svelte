@@ -70,18 +70,18 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div class="space-y-6">
+<div class="space-y-6 animate-page-enter">
   {#if activeTool === null}
     <!-- Tools Grid View -->
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-4xl font-black bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 bg-clip-text text-transparent">
+        <h1 class="text-5xl font-black bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 bg-clip-text text-transparent leading-tight tracking-tight mb-3">
           🛠️ Tools
         </h1>
-        <p class="text-slate-400 mt-2">Powerful features to optimize your growth</p>
+        <p class="text-slate-300 text-lg">Powerful features to optimize your growth</p>
       </div>
-      <div class="text-xs text-slate-500 hidden md:block">
-        Press 1-5 to open, ESC to close
+      <div class="text-xs text-slate-500 bg-slate-800/50 px-4 py-2 rounded-xl border border-slate-700/50 hidden md:block">
+        <kbd class="font-mono">1-5</kbd> to open • <kbd class="font-mono">ESC</kbd> to close
       </div>
     </div>
 
@@ -89,27 +89,30 @@
       {#each tools as tool}
         <button
           on:click={() => activeTool = tool.id}
-          class="group relative bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-6 text-left hover:scale-105 transition-all duration-300 hover:shadow-2xl overflow-hidden"
+          class="group relative bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-2xl rounded-2xl border border-slate-700/50 p-8 text-left hover:scale-105 transition-all duration-300 hover:shadow-2xl shadow-xl shadow-black/20 overflow-hidden"
         >
           <!-- Gradient Background on Hover -->
-          <div class="absolute inset-0 bg-gradient-to-br {tool.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+          <div class="absolute inset-0 bg-gradient-to-br {tool.gradient} opacity-0 group-hover:opacity-15 transition-opacity duration-300"></div>
 
           <!-- Content -->
           <div class="relative z-10">
-            <div class="flex items-start justify-between mb-4">
-              <div class="text-5xl mb-2">{tool.icon}</div>
-              <div class="text-xs bg-slate-800 px-2 py-1 rounded-lg text-slate-400">
-                Press {tool.shortcut}
+            <div class="flex items-start justify-between mb-6">
+              <div class="text-6xl mb-2 group-hover:scale-110 transition-transform duration-300">{tool.icon}</div>
+              <div class="text-xs bg-slate-800/80 px-3 py-1.5 rounded-lg text-slate-400 font-mono border border-slate-700">
+                {tool.shortcut}
               </div>
             </div>
-            <h3 class="text-xl font-bold mb-2 group-hover:bg-gradient-to-r group-hover:{tool.gradient} group-hover:bg-clip-text group-hover:text-transparent transition-all">
+            <h3 class="text-2xl font-black mb-3 group-hover:bg-gradient-to-r group-hover:{tool.gradient} group-hover:bg-clip-text group-hover:text-transparent transition-all">
               {tool.name}
             </h3>
-            <p class="text-slate-400 text-sm">{tool.description}</p>
+            <p class="text-slate-400 text-sm leading-relaxed">{tool.description}</p>
           </div>
 
-          <!-- Decorative Corner -->
-          <div class="absolute -bottom-8 -right-8 w-24 h-24 bg-gradient-to-br {tool.gradient} rounded-full blur-2xl opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+          <!-- Decorative Corner Glow -->
+          <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-gradient-to-br {tool.gradient} rounded-full blur-3xl opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
+
+          <!-- Border glow on hover -->
+          <div class="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-{tool.gradient.split('-')[1]}-500/50 transition-all duration-300"></div>
         </button>
       {/each}
     </div>
@@ -151,7 +154,22 @@
     }
   }
 
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .animate-fade-in {
     animation: fade-in 0.3s ease-out;
+  }
+
+  .animate-page-enter {
+    animation: page-enter 0.4s ease-out;
   }
 </style>

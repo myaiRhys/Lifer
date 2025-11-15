@@ -44,45 +44,53 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div class="space-y-6">
+<div class="space-y-6 animate-page-enter">
   <!-- Page Header -->
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between mb-6">
     <div>
-      <h1 class="text-4xl font-black bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+      <h1 class="text-5xl font-black bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight tracking-tight mb-3">
         ⚡ Focus
       </h1>
-      <p class="text-slate-400 mt-2">Deep work sessions to maximize productivity</p>
+      <p class="text-slate-300 text-lg">Deep work sessions to maximize productivity</p>
     </div>
-    <div class="text-xs text-slate-500 hidden md:block">
-      Press 1-3 for quick navigation
+    <div class="text-xs text-slate-500 bg-slate-800/50 px-4 py-2 rounded-xl border border-slate-700/50 hidden md:block">
+      <kbd class="font-mono">1-3</kbd> for quick navigation
     </div>
   </div>
 
-  <!-- Mode Selection Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <!-- Mode Selection Cards with enhanced styling -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     {#each modes as mode}
       <button
         on:click={() => activeMode = mode.id}
-        class="group relative bg-slate-900/50 backdrop-blur-xl rounded-2xl border transition-all duration-300 p-6 text-left {activeMode === mode.id
-          ? `border-transparent bg-gradient-to-br ${mode.gradient} shadow-2xl shadow-${mode.gradient.split('-')[1]}-500/30 scale-105`
-          : 'border-slate-700/50 hover:border-slate-600 hover:scale-105'}"
+        class="group relative bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-2xl rounded-2xl border transition-all duration-300 p-8 text-left shadow-xl shadow-black/20 {activeMode === mode.id
+          ? `border-transparent bg-gradient-to-br ${mode.gradient} shadow-2xl shadow-purple-500/30 scale-105`
+          : 'border-slate-700/50 hover:border-slate-600 hover:scale-105 hover:shadow-2xl'}"
       >
+        {#if activeMode === mode.id}
+          <div class="absolute inset-0 bg-gradient-to-br {mode.gradient} rounded-2xl blur-xl opacity-40 -z-10"></div>
+        {/if}
+
         <div class="relative z-10">
-          <div class="flex items-start justify-between mb-3">
-            <div class="text-4xl">{mode.icon}</div>
+          <div class="flex items-start justify-between mb-4">
+            <div class="text-5xl group-hover:scale-110 transition-transform duration-300">{mode.icon}</div>
             {#if activeMode !== mode.id}
-              <div class="text-xs bg-slate-800 px-2 py-1 rounded-lg text-slate-400">
+              <div class="text-xs bg-slate-800/80 px-3 py-1.5 rounded-lg text-slate-400 font-mono border border-slate-700">
                 {mode.shortcut}
               </div>
             {/if}
           </div>
-          <h3 class="text-xl font-bold mb-2 {activeMode === mode.id ? 'text-white' : 'text-slate-200'}">
+          <h3 class="text-2xl font-black mb-3 {activeMode === mode.id ? 'text-white' : 'text-slate-200 group-hover:text-white'}">
             {mode.name}
           </h3>
-          <p class="text-sm {activeMode === mode.id ? 'text-white/80' : 'text-slate-400'}">
+          <p class="text-sm leading-relaxed {activeMode === mode.id ? 'text-white/90' : 'text-slate-400 group-hover:text-slate-300'}">
             {mode.description}
           </p>
         </div>
+
+        {#if activeMode !== mode.id}
+          <div class="absolute -bottom-6 -right-6 w-24 h-24 bg-gradient-to-br {mode.gradient} rounded-full blur-2xl opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+        {/if}
       </button>
     {/each}
   </div>
@@ -111,7 +119,22 @@
     }
   }
 
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .animate-fade-in {
     animation: fade-in 0.3s ease-out;
+  }
+
+  .animate-page-enter {
+    animation: page-enter 0.4s ease-out;
   }
 </style>

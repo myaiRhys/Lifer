@@ -384,17 +384,21 @@
   {/if}
 
   <main class="p-4 max-w-7xl mx-auto">
-    {#if currentView === 'dashboard'}
-      <DashboardEnhanced />
-    {:else if currentView === 'input'}
-      <InputPage />
-    {:else if currentView === 'insights'}
-      <InsightsPage />
-    {:else if currentView === 'tools'}
-      <ToolsPage />
-    {:else if currentView === 'focus'}
-      <FocusPage />
-    {/if}
+    {#key currentView}
+      <div class="animate-page-transition">
+        {#if currentView === 'dashboard'}
+          <DashboardEnhanced />
+        {:else if currentView === 'input'}
+          <InputPage />
+        {:else if currentView === 'insights'}
+          <InsightsPage />
+        {:else if currentView === 'tools'}
+          <ToolsPage />
+        {:else if currentView === 'focus'}
+          <FocusPage />
+        {/if}
+      </div>
+    {/key}
   </main>
 
   <!-- Hidden file input for import -->
@@ -419,3 +423,44 @@
   <!-- PWA Install Prompt -->
   <PWAInstallPrompt />
 </div>
+
+<style>
+  @keyframes page-transition {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-page-transition {
+    animation: page-transition 0.3s ease-out;
+  }
+
+  /* Custom scrollbar styling */
+  :global(::-webkit-scrollbar) {
+    width: 8px;
+    height: 8px;
+  }
+
+  :global(::-webkit-scrollbar-track) {
+    background: rgb(15 23 42);
+  }
+
+  :global(::-webkit-scrollbar-thumb) {
+    background: rgb(71 85 105);
+    border-radius: 4px;
+  }
+
+  :global(::-webkit-scrollbar-thumb:hover) {
+    background: rgb(100 116 139);
+  }
+
+  /* Smooth scroll behavior */
+  :global(html) {
+    scroll-behavior: smooth;
+  }
+</style>
