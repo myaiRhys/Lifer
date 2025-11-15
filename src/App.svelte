@@ -30,6 +30,7 @@
   import MakerModeToggle from './components/MakerModeToggle.svelte'
   import CookieJar from './components/CookieJar.svelte'
   import Seasons from './components/Seasons.svelte'
+  import PWAInstallPrompt from './components/PWAInstallPrompt.svelte'
   import { initializeStorage, getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
   import { notificationSystem } from './lib/notifications'
@@ -620,4 +621,7 @@
   {#if showWeeklyReview && !showOnboarding}
     <WeeklyReview on:complete={completeWeeklyReview} on:skip={skipWeeklyReview} />
   {/if}
+
+  <!-- PWA Install Prompt -->
+  <PWAInstallPrompt />
 </div>
