@@ -1,4 +1,60 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" fill="#1e293b"/>
-  <text x="256" y="310" font-family="Arial, sans-serif" font-size="200" font-weight="bold" fill="#60a5fa" text-anchor="middle">L</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Main gradient (blue → purple → pink) -->
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#9333ea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Light gradient for highlights -->
+    <linearGradient id="highlightGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Radial gradient for glow effect -->
+    <radialGradient id="glowGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background circle with gradient -->
+  <circle cx="256" cy="256" r="256" fill="url(#mainGradient)"/>
+
+  <!-- Subtle glow overlay -->
+  <circle cx="256" cy="180" r="200" fill="url(#glowGradient)" opacity="0.4"/>
+
+  <!-- Outer ring (progress track) -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#ffffff" stroke-width="16" opacity="0.2"/>
+
+  <!-- Progress ring (3/4 complete) -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#ffffff" stroke-width="16"
+          stroke-dasharray="1130 1507" stroke-dashoffset="0"
+          transform="rotate(-90 256 256)" stroke-linecap="round" opacity="0.9"/>
+
+  <!-- Inner ring -->
+  <circle cx="256" cy="256" r="140" fill="none" stroke="#ffffff" stroke-width="12" opacity="0.15"/>
+
+  <!-- Center target/bullseye -->
+  <circle cx="256" cy="256" r="100" fill="#ffffff" opacity="0.25"/>
+  <circle cx="256" cy="256" r="70" fill="#ffffff" opacity="0.35"/>
+  <circle cx="256" cy="256" r="40" fill="#ffffff" opacity="0.5"/>
+
+  <!-- Center dot -->
+  <circle cx="256" cy="256" r="20" fill="#ffffff"/>
+
+  <!-- Upward arrow (growth/progress) -->
+  <g transform="translate(256, 256)">
+    <!-- Arrow shaft -->
+    <rect x="-12" y="-60" width="24" height="100" fill="#ffffff" rx="12"/>
+
+    <!-- Arrow head -->
+    <path d="M 0,-80 L 40,-40 L 20,-40 L 20,-20 L -20,-20 L -20,-40 L -40,-40 Z" fill="#ffffff"/>
+  </g>
+
+  <!-- Shine effect (top left) -->
+  <ellipse cx="180" cy="150" rx="80" ry="60" fill="#ffffff" opacity="0.15"
+           transform="rotate(-30 180 150)"/>
 </svg>
