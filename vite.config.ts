@@ -3,9 +3,9 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// Use lowercase to match GitHub Pages URL
-// GitHub provides: https://myairhys.github.io/lifer/
-const baseUrl = '/lifer/'
+// Use capital L to match GitHub Pages URL
+// GitHub provides: https://myairhys.github.io/Lifer/
+const baseUrl = '/Lifer/'
 
 export default defineConfig({
   base: baseUrl,
