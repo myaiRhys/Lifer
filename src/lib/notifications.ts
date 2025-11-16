@@ -134,6 +134,37 @@ class NotificationSystem {
       `${days} days and counting! Keep it up!`
     )
   }
+
+  async showTimerComplete(title: string, body: string) {
+    // Always show timer notifications regardless of general settings
+    // This is specifically requested for timer functionality
+    if (!this.permissionGranted) {
+      await this.requestPermission()
+    }
+
+    if ('Notification' in window && this.permissionGranted) {
+      const notification = new Notification(title, {
+        body,
+        icon: '/Lifer/icons/icon-192.svg',
+        badge: '/Lifer/icons/icon-192.svg',
+        tag: 'lifer-timer',
+        requireInteraction: true, // Notification stays until user interacts
+        vibrate: [200, 100, 200], // Vibration pattern for mobile
+        silent: false
+      })
+
+      // Play sound on click
+      notification.onclick = () => {
+        window.focus()
+        notification.close()
+      }
+    }
+
+    // Also vibrate if supported (for when app is open)
+    if ('vibrate' in navigator) {
+      navigator.vibrate([200, 100, 200, 100, 200])
+    }
+  }
 }
 
 export const notificationSystem = new NotificationSystem()

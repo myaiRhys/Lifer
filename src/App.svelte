@@ -172,10 +172,13 @@
   }
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white relative overflow-x-hidden">
+<div
+  class="min-h-screen text-white relative overflow-x-hidden transition-colors duration-500"
+  style="background: linear-gradient(135deg, var(--color-bg-primary, #0f172a) 0%, var(--color-bg-secondary, #1e293b) 50%, var(--color-bg-tertiary, #334155) 100%); color: var(--color-text-primary, #f1f5f9);"
+>
   <!-- Ambient Glow Effects -->
-  <div class="fixed top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl -z-10"></div>
-  <div class="fixed bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -z-10"></div>
+  <div class="fixed top-0 left-1/4 w-96 h-96 rounded-full blur-3xl -z-10 transition-colors duration-500" style="background-color: var(--color-accent, #3b82f6); opacity: 0.1;"></div>
+  <div class="fixed bottom-0 right-1/4 w-96 h-96 rounded-full blur-3xl -z-10 transition-colors duration-500" style="background-color: var(--color-accent-hover, #2563eb); opacity: 0.1;"></div>
 
   <!-- Enhanced Header with Glassmorphism - Mobile Optimized -->
   <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-xl border-b border-indigo-500/20 shadow-2xl shadow-indigo-900/20">
@@ -432,7 +435,7 @@
     {#key currentView}
       <div class="animate-page-transition">
         {#if currentView === 'dashboard'}
-          <DashboardEnhanced />
+          <DashboardEnhanced on:navigate={(e) => currentView = e.detail} />
         {:else if currentView === 'input'}
           <InputPage />
         {:else if currentView === 'insights'}

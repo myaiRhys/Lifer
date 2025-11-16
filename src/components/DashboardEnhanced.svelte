@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { createEventDispatcher } from 'svelte'
   import {
     getUserState,
     getActiveTasks,
@@ -25,6 +26,8 @@
     getSeasonColors
   } from '../lib/db'
   import type { UserState, Task, Practice, Chore, Identity, IdentityAlignment, MorningSession, SeasonPhase } from '../lib/types'
+
+  const dispatch = createEventDispatcher()
 
   let userState: UserState | null = null
   let activeTasks: Task[] = []
@@ -495,21 +498,21 @@
   <div class="sticky bottom-0 bg-slate-900/95 backdrop-blur border-t border-slate-700 p-4 -mx-6 -mb-6">
     <div class="flex items-center justify-center gap-4">
       <button
-        on:click={() => window.location.href = '#tasks'}
+        on:click={() => dispatch('navigate', 'input')}
         class="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-semibold transition-colors"
       >
         <span class="text-xl">✅</span>
         <span>Add Task</span>
       </button>
       <button
-        on:click={() => window.location.href = '#energy'}
+        on:click={() => dispatch('navigate', 'tools')}
         class="flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-500 rounded-xl font-semibold transition-colors"
       >
         <span class="text-xl">⚡</span>
         <span>Energy Check</span>
       </button>
       <button
-        on:click={() => window.location.href = '#focus'}
+        on:click={() => dispatch('navigate', 'focus')}
         class="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-500 rounded-xl font-semibold transition-colors"
       >
         <span class="text-xl">🎯</span>
