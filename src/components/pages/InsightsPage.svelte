@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import LoadingSkeleton from '../shared/LoadingSkeleton.svelte'
+  import { prefetchAdjacentTabs } from '../../lib/utils/prefetch'
 
   type InsightTab = 'analytics' | 'heatmap' | 'recovery' | 'gateway' | 'stacking' | 'authenticity' | 'marginal' | 'maker' | 'energy'
 
@@ -19,6 +21,18 @@
   }
 
   $: activeComponent = activeTab === 'energy' ? null : componentMap[activeTab]()
+
+  // Prefetch adjacent tabs for smoother navigation
+  $: if (activeTab && activeTab !== 'energy') {
+    prefetchAdjacentTabs(activeTab, componentMap)
+  }
+
+  // Prefetch analytics on mount (most commonly viewed)
+  onMount(() => {
+    if (activeTab !== 'analytics') {
+      componentMap.analytics()
+    }
+  })
 
   const tabs = [
     { id: 'analytics', label: 'Analytics', icon: '📈', shortcut: '1' },

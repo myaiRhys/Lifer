@@ -1,6 +1,8 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import PageHeader from '../shared/PageHeader.svelte'
   import LoadingSkeleton from '../shared/LoadingSkeleton.svelte'
+  import { prefetchAdjacentTabs } from '../../lib/utils/prefetch'
 
   type InputTab = 'tasks' | 'practices' | 'chores' | 'morning' | 'identity' | 'outcomes' | 'trees'
 
@@ -18,6 +20,18 @@
   }
 
   $: activeComponent = componentMap[activeTab]()
+
+  // Prefetch adjacent tabs for instant transitions
+  $: if (activeTab) {
+    prefetchAdjacentTabs(activeTab, componentMap)
+  }
+
+  // Prefetch tasks tab on mount (most commonly used)
+  onMount(() => {
+    if (activeTab !== 'tasks') {
+      componentMap.tasks()
+    }
+  })
 
   const tabs = [
     { id: 'tasks', label: 'Tasks', icon: '✅', shortcut: '1', color: 'from-blue-500 to-cyan-500' },

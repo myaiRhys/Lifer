@@ -3,6 +3,7 @@
   import { Chart, registerables } from 'chart.js'
   import { getTasks, getEnergyLogs, getFocusSessions, getUserState, getHistory } from '../lib/db'
   import type { Task, EnergyLog, FocusSession, UserState, HistoryRecord } from '../lib/types'
+  import { memoize } from '../lib/utils/performance'
 
   Chart.register(...registerables)
 
@@ -43,15 +44,31 @@
     history = await getHistory()
   }
 
+  // Memoized expensive computations - cache results to avoid recalculating
+  const getCompletedTasks = memoize((taskList: Task[]) =>
+    taskList.filter(t => t.completed)
+  )
+
+  const getFlowSessions = memoize((sessionList: FocusSession[]) =>
+    sessionList.filter(s => s.flowStateAchieved)
+  )
+
+  const getTaskHistory = memoize((historyList: HistoryRecord[]) =>
+    historyList.filter(h => h.type === 'task')
+  )
+
   function calculateStats() {
-    // Average leverage
-    const completedTasks = tasks.filter(t => t.completed)
+    // Use memoized functions to avoid refiltering on every calculation
+    const completedTasks = getCompletedTasks(tasks)
+    const flowSessions = getFlowSessions(sessions)
+    const taskHistory = getTaskHistory(history)
+
+    // Average leverage (optimized reduce)
     stats.avgLeverage = completedTasks.length > 0
       ? completedTasks.reduce((sum, t) => sum + t.leverageScore, 0) / completedTasks.length
       : 0
 
     // Flow rate
-    const flowSessions = sessions.filter(s => s.flowStateAchieved)
     stats.flowRate = sessions.length > 0
       ? (flowSessions.length / sessions.length) * 100
       : 0
@@ -59,24 +76,24 @@
     // Total completed tasks
     stats.totalTasks = completedTasks.length
 
-    // Average energy
+    // Average energy (optimized reduce)
     stats.avgEnergy = energyLogs.length > 0
       ? energyLogs.reduce((sum, l) => sum + l.energy, 0) / energyLogs.length
       : 0
 
-    // Best day of week
+    // Best day of week (use taskHistory instead of filtering again)
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     const dayCount = Array(7).fill(0)
-    history.filter(h => h.type === 'task').forEach(h => {
+    taskHistory.forEach(h => {
       const day = new Date(h.completedAt).getDay()
       dayCount[day]++
     })
     const bestDayIndex = dayCount.indexOf(Math.max(...dayCount))
     stats.bestDay = dayNames[bestDayIndex]
 
-    // Peak hours
+    // Peak hours (use taskHistory instead of filtering again)
     const hourCount = Array(24).fill(0)
-    history.filter(h => h.type === 'task').forEach(h => {
+    taskHistory.forEach(h => {
       hourCount[h.hourOfDay]++
     })
     const peakHour = hourCount.indexOf(Math.max(...hourCount))
