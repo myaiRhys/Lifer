@@ -1,16 +1,23 @@
 <script lang="ts">
-  import TaskList from '../TaskList.svelte'
-  import Practices from '../Practices.svelte'
-  import Chores from '../Chores.svelte'
-  import MorningSovereignty from '../MorningSovereignty.svelte'
-  import IdentityBuilder from '../IdentityBuilder.svelte'
-  import Outcomes from '../Outcomes.svelte'
-  import OutcomeTreeView from '../OutcomeTreeView.svelte'
   import PageHeader from '../shared/PageHeader.svelte'
+  import LoadingSkeleton from '../shared/LoadingSkeleton.svelte'
 
   type InputTab = 'tasks' | 'practices' | 'chores' | 'morning' | 'identity' | 'outcomes' | 'trees'
 
   let activeTab: InputTab = 'tasks'
+
+  // Lazy load components only when needed
+  const componentMap = {
+    tasks: () => import('../TaskList.svelte'),
+    practices: () => import('../Practices.svelte'),
+    chores: () => import('../Chores.svelte'),
+    morning: () => import('../MorningSovereignty.svelte'),
+    identity: () => import('../IdentityBuilder.svelte'),
+    outcomes: () => import('../Outcomes.svelte'),
+    trees: () => import('../OutcomeTreeView.svelte')
+  }
+
+  $: activeComponent = componentMap[activeTab]()
 
   const tabs = [
     { id: 'tasks', label: 'Tasks', icon: '✅', shortcut: '1', color: 'from-blue-500 to-cyan-500' },
@@ -70,23 +77,17 @@
     </div>
   </div>
 
-  <!-- Tab Content -->
+  <!-- Tab Content with Lazy Loading -->
   <div class="animate-fade-in">
-    {#if activeTab === 'tasks'}
-      <TaskList />
-    {:else if activeTab === 'practices'}
-      <Practices />
-    {:else if activeTab === 'chores'}
-      <Chores />
-    {:else if activeTab === 'morning'}
-      <MorningSovereignty />
-    {:else if activeTab === 'identity'}
-      <IdentityBuilder />
-    {:else if activeTab === 'outcomes'}
-      <Outcomes />
-    {:else if activeTab === 'trees'}
-      <OutcomeTreeView />
-    {/if}
+    {#await activeComponent}
+      <LoadingSkeleton rows={3} type="list" />
+    {:then module}
+      <svelte:component this={module.default} />
+    {:catch error}
+      <div class="text-center py-12 text-red-400">
+        <p>Failed to load component: {error.message}</p>
+      </div>
+    {/await}
   </div>
 </div>
 

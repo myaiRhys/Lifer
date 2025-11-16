@@ -1,11 +1,18 @@
 <script lang="ts">
-  import FocusTimer from '../FocusTimer.svelte'
-  import UltradianTimer from '../UltradianTimer.svelte'
-  import BodyDoublingView from '../BodyDoublingView.svelte'
+  import LoadingSkeleton from '../shared/LoadingSkeleton.svelte'
 
   type FocusMode = 'pomodoro' | 'ultradian' | 'doubling'
 
   let activeMode: FocusMode = 'pomodoro'
+
+  // Lazy load focus mode components
+  const componentMap: Record<FocusMode, () => Promise<any>> = {
+    pomodoro: () => import('../FocusTimer.svelte'),
+    ultradian: () => import('../UltradianTimer.svelte'),
+    doubling: () => import('../BodyDoublingView.svelte')
+  }
+
+  $: activeComponent = componentMap[activeMode]()
 
   const modes = [
     {
@@ -95,15 +102,17 @@
     {/each}
   </div>
 
-  <!-- Active Mode Content -->
+  <!-- Active Mode Content with Lazy Loading -->
   <div class="animate-fade-in">
-    {#if activeMode === 'pomodoro'}
-      <FocusTimer />
-    {:else if activeMode === 'ultradian'}
-      <UltradianTimer />
-    {:else if activeMode === 'doubling'}
-      <BodyDoublingView />
-    {/if}
+    {#await activeComponent}
+      <LoadingSkeleton rows={2} type="card" />
+    {:then module}
+      <svelte:component this={module.default} />
+    {:catch error}
+      <div class="text-center py-12 text-red-400">
+        <p>Failed to load focus mode: {error.message}</p>
+      </div>
+    {/await}
   </div>
 </div>
 
