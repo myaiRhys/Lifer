@@ -10,6 +10,7 @@
   import PWAInstallPrompt from './components/PWAInstallPrompt.svelte'
   import OfflineIndicator from './components/OfflineIndicator.svelte'
   import AppUpdateNotification from './components/AppUpdateNotification.svelte'
+  import ExportDialog from './components/ExportDialog.svelte'
   import MobileBottomNav from './components/MobileBottomNav.svelte'
   import { initializeStorage, getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
@@ -22,6 +23,7 @@
   let showSettings = false
   let showOnboarding = false
   let showWeeklyReview = false
+  let showExportDialog = false
   let fileInput: HTMLInputElement
 
   // Swipe gesture support for mobile
@@ -392,13 +394,13 @@
 
         <!-- Data Backup Section -->
         <div class="mb-6">
-          <label class="block text-sm font-medium mb-3">Data Backup</label>
+          <label class="block text-sm font-medium mb-3">Data Backup & Export</label>
           <div class="space-y-2">
             <button
-              class="w-full px-4 py-2 bg-green-900/30 hover:bg-green-900/50 text-green-400 border border-green-700 rounded-lg font-medium transition-colors"
-              on:click={handleExport}
+              class="w-full px-4 py-2 bg-gradient-to-r from-green-900/30 to-emerald-900/30 hover:from-green-900/50 hover:to-emerald-900/50 text-green-400 border border-green-700 rounded-lg font-medium transition-all hover:scale-102"
+              on:click={() => showExportDialog = true}
             >
-              📥 Export All Data
+              📤 Export Data (Multiple Formats)
             </button>
             <button
               class="w-full px-4 py-2 bg-blue-900/30 hover:bg-blue-900/50 text-blue-400 border border-blue-700 rounded-lg font-medium transition-colors"
@@ -474,6 +476,9 @@
 
   <!-- App Update Notification -->
   <AppUpdateNotification />
+
+  <!-- Export Dialog -->
+  <ExportDialog bind:show={showExportDialog} />
 </div>
 
 <style>
