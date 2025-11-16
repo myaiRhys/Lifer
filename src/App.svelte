@@ -8,6 +8,7 @@
   import Onboarding from './components/Onboarding.svelte'
   import WeeklyReview from './components/WeeklyReview.svelte'
   import PWAInstallPrompt from './components/PWAInstallPrompt.svelte'
+  import MobileBottomNav from './components/MobileBottomNav.svelte'
   import { initializeStorage, getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
   import { notificationSystem } from './lib/notifications'
@@ -20,6 +21,42 @@
   let showOnboarding = false
   let showWeeklyReview = false
   let fileInput: HTMLInputElement
+
+  // Swipe gesture support for mobile
+  let touchStartX = 0
+  let touchEndX = 0
+
+  const views = ['dashboard', 'input', 'insights', 'tools', 'focus']
+
+  function handleTouchStart(e: TouchEvent) {
+    touchStartX = e.changedTouches[0].screenX
+  }
+
+  function handleTouchEnd(e: TouchEvent) {
+    touchEndX = e.changedTouches[0].screenX
+    handleSwipe()
+  }
+
+  function handleSwipe() {
+    const swipeThreshold = 50
+    const diff = touchStartX - touchEndX
+
+    if (Math.abs(diff) > swipeThreshold) {
+      const currentIndex = views.indexOf(currentView)
+
+      if (diff > 0 && currentIndex < views.length - 1) {
+        // Swipe left - go to next view
+        currentView = views[currentIndex + 1]
+      } else if (diff < 0 && currentIndex > 0) {
+        // Swipe right - go to previous view
+        currentView = views[currentIndex - 1]
+      }
+    }
+  }
+
+  function handleNavigation(view: string) {
+    currentView = view
+  }
 
   onMount(async () => {
     await initializeStorage()
@@ -136,49 +173,49 @@
   <div class="fixed top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl -z-10"></div>
   <div class="fixed bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -z-10"></div>
 
-  <!-- Enhanced Header with Glassmorphism -->
+  <!-- Enhanced Header with Glassmorphism - Mobile Optimized -->
   <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-xl border-b border-indigo-500/20 shadow-2xl shadow-indigo-900/20">
-    <div class="flex items-center justify-between h-18 px-6 max-w-7xl mx-auto">
-      <!-- Logo/Brand -->
-      <div class="flex items-center gap-4">
-        <div class="w-14 h-14 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-purple-500/50 animate-pulse border-2 border-white/10">
-          <span class="text-3xl font-bold">🎯</span>
+    <div class="flex items-center justify-between h-16 md:h-18 px-3 md:px-6 max-w-7xl mx-auto">
+      <!-- Logo/Brand - Compact on mobile -->
+      <div class="flex items-center gap-2 md:gap-4">
+        <div class="w-10 h-10 md:w-14 md:h-14 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 rounded-xl md:rounded-2xl flex items-center justify-center shadow-2xl shadow-purple-500/50 animate-pulse border-2 border-white/10">
+          <span class="text-2xl md:text-3xl font-bold">🎯</span>
         </div>
         <div>
-          <h1 class="text-3xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-none">
+          <h1 class="text-xl md:text-3xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-none">
             Lifer
           </h1>
-          <p class="text-xs text-slate-400 font-medium">Atomic Habits System</p>
+          <p class="text-[10px] md:text-xs text-slate-400 font-medium">Atomic Habits System</p>
         </div>
       </div>
 
-      <!-- Actions -->
-      <div class="flex items-center gap-3">
-        <!-- Sound Toggle -->
+      <!-- Actions - Touch-optimized -->
+      <div class="flex items-center gap-2 md:gap-3">
+        <!-- Sound Toggle - Larger touch target -->
         {#if settings}
           <button
-            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-700 hover:from-blue-600 hover:to-purple-600 backdrop-blur transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-blue-500/50 flex items-center justify-center border-2 border-slate-600 hover:border-blue-400"
+            class="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-gradient-to-br from-slate-800 to-slate-700 hover:from-blue-600 hover:to-purple-600 active:scale-95 backdrop-blur transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:shadow-blue-500/50 flex items-center justify-center border-2 border-slate-600 hover:border-blue-400"
             on:click={toggleSound}
             title="Toggle Sound"
           >
-            <span class="text-2xl">{settings.soundEnabled ? '🔊' : '🔇'}</span>
+            <span class="text-xl md:text-2xl">{settings.soundEnabled ? '🔊' : '🔇'}</span>
           </button>
         {/if}
 
-        <!-- Settings Button -->
+        <!-- Settings Button - Touch-optimized -->
         <button
-          class="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 backdrop-blur transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50 flex items-center gap-3 font-bold text-lg border-2 border-purple-400/20 hover:border-purple-400"
+          class="px-4 md:px-6 py-3 rounded-xl md:rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 active:scale-95 backdrop-blur transition-all duration-200 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50 flex items-center gap-2 md:gap-3 font-bold text-base md:text-lg border-2 border-purple-400/20 hover:border-purple-400"
           on:click={() => showSettings = !showSettings}
         >
-          <span class="text-2xl">⚙️</span>
+          <span class="text-xl md:text-2xl">⚙️</span>
           <span class="hidden sm:inline">Settings</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Redesigned Clean Navigation -->
-  <nav class="sticky top-18 z-30 bg-slate-900/70 backdrop-blur-2xl border-b border-indigo-500/30 shadow-2xl shadow-indigo-900/20">
+  <!-- Redesigned Clean Navigation - Hidden on mobile, shown on desktop -->
+  <nav class="hidden md:block sticky top-18 z-30 bg-slate-900/70 backdrop-blur-2xl border-b border-indigo-500/30 shadow-2xl shadow-indigo-900/20">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex gap-3 py-4 justify-center">
         <button
@@ -383,7 +420,11 @@
     </div>
   {/if}
 
-  <main class="p-4 max-w-7xl mx-auto">
+  <main
+    class="p-4 pb-24 md:pb-4 max-w-7xl mx-auto"
+    on:touchstart={handleTouchStart}
+    on:touchend={handleTouchEnd}
+  >
     {#key currentView}
       <div class="animate-page-transition">
         {#if currentView === 'dashboard'}
@@ -400,6 +441,9 @@
       </div>
     {/key}
   </main>
+
+  <!-- Mobile Bottom Navigation -->
+  <MobileBottomNav {currentView} onNavigate={handleNavigation} />
 
   <!-- Hidden file input for import -->
   <input
