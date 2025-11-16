@@ -8,6 +8,8 @@
   import Onboarding from './components/Onboarding.svelte'
   import WeeklyReview from './components/WeeklyReview.svelte'
   import PWAInstallPrompt from './components/PWAInstallPrompt.svelte'
+  import OfflineIndicator from './components/OfflineIndicator.svelte'
+  import AppUpdateNotification from './components/AppUpdateNotification.svelte'
   import MobileBottomNav from './components/MobileBottomNav.svelte'
   import { initializeStorage, getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
@@ -466,6 +468,12 @@
 
   <!-- PWA Install Prompt -->
   <PWAInstallPrompt />
+
+  <!-- Offline Indicator -->
+  <OfflineIndicator />
+
+  <!-- App Update Notification -->
+  <AppUpdateNotification />
 </div>
 
 <style>
