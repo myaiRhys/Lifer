@@ -1,13 +1,20 @@
 <script lang="ts">
-  import TaskPrioritizer from '../TaskPrioritizer.svelte'
-  import CookieJar from '../CookieJar.svelte'
-  import Seasons from '../Seasons.svelte'
-  import PowerUpShop from '../PowerUpShop.svelte'
-  import CouplesMode from '../CouplesMode.svelte'
+  import LoadingSkeleton from '../shared/LoadingSkeleton.svelte'
 
   type Tool = 'prioritizer' | 'cookie-jar' | 'seasons' | 'shop' | 'couples'
 
   let activeTool: Tool | null = null
+
+  // Lazy load tool components only when selected
+  const componentMap: Record<Tool, () => Promise<any>> = {
+    prioritizer: () => import('../TaskPrioritizer.svelte'),
+    'cookie-jar': () => import('../CookieJar.svelte'),
+    seasons: () => import('../Seasons.svelte'),
+    shop: () => import('../PowerUpShop.svelte'),
+    couples: () => import('../CouplesMode.svelte')
+  }
+
+  $: activeComponent = activeTool ? componentMap[activeTool]() : null
 
   const tools = [
     {
@@ -127,16 +134,17 @@
         <span class="text-xs text-slate-500">(ESC)</span>
       </button>
 
-      {#if activeTool === 'prioritizer'}
-        <TaskPrioritizer />
-      {:else if activeTool === 'cookie-jar'}
-        <CookieJar />
-      {:else if activeTool === 'seasons'}
-        <Seasons />
-      {:else if activeTool === 'shop'}
-        <PowerUpShop />
-      {:else if activeTool === 'couples'}
-        <CouplesMode />
+      <!-- Lazy Load Active Tool -->
+      {#if activeComponent}
+        {#await activeComponent}
+          <LoadingSkeleton rows={3} type="card" />
+        {:then module}
+          <svelte:component this={module.default} />
+        {:catch error}
+          <div class="text-center py-12 text-red-400">
+            <p>Failed to load tool: {error.message}</p>
+          </div>
+        {/await}
       {/if}
     </div>
   {/if}

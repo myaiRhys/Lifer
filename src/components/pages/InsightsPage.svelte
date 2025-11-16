@@ -1,18 +1,24 @@
 <script lang="ts">
-  import PersonalAnalytics from '../PersonalAnalytics.svelte'
-  import HeatMap from '../HeatMap.svelte'
-  import NeverMissTwice from '../NeverMissTwice.svelte'
-  import TwoMinuteGateway from '../TwoMinuteGateway.svelte'
-  import HabitStackBuilder from '../HabitStackBuilder.svelte'
-  import AuthenticityTracker from '../AuthenticityTracker.svelte'
-  import MarginalGainsVisualizer from '../MarginalGainsVisualizer.svelte'
-  import MakerModeToggle from '../MakerModeToggle.svelte'
-  import EnergyLogger from '../EnergyLogger.svelte'
-  import BPTAnalysis from '../BPTAnalysis.svelte'
+  import LoadingSkeleton from '../shared/LoadingSkeleton.svelte'
 
   type InsightTab = 'analytics' | 'heatmap' | 'recovery' | 'gateway' | 'stacking' | 'authenticity' | 'marginal' | 'maker' | 'energy'
 
   let activeTab: InsightTab = 'analytics'
+
+  // Lazy load heavy analytics components only when needed
+  const componentMap = {
+    analytics: () => import('../PersonalAnalytics.svelte'),
+    heatmap: () => import('../HeatMap.svelte'),
+    recovery: () => import('../NeverMissTwice.svelte'),
+    gateway: () => import('../TwoMinuteGateway.svelte'),
+    stacking: () => import('../HabitStackBuilder.svelte'),
+    authenticity: () => import('../AuthenticityTracker.svelte'),
+    marginal: () => import('../MarginalGainsVisualizer.svelte'),
+    maker: () => import('../MakerModeToggle.svelte'),
+    energy: null // Special case: loads two components
+  }
+
+  $: activeComponent = activeTab === 'energy' ? null : componentMap[activeTab]()
 
   const tabs = [
     { id: 'analytics', label: 'Analytics', icon: '📈', shortcut: '1' },
@@ -74,29 +80,32 @@
     </div>
   </div>
 
-  <!-- Tab Content -->
+  <!-- Tab Content with Lazy Loading -->
   <div class="animate-fade-in">
-    {#if activeTab === 'analytics'}
-      <PersonalAnalytics />
-    {:else if activeTab === 'heatmap'}
-      <HeatMap />
-    {:else if activeTab === 'recovery'}
-      <NeverMissTwice />
-    {:else if activeTab === 'gateway'}
-      <TwoMinuteGateway />
-    {:else if activeTab === 'stacking'}
-      <HabitStackBuilder />
-    {:else if activeTab === 'authenticity'}
-      <AuthenticityTracker />
-    {:else if activeTab === 'marginal'}
-      <MarginalGainsVisualizer />
-    {:else if activeTab === 'maker'}
-      <MakerModeToggle />
-    {:else if activeTab === 'energy'}
-      <div class="space-y-6">
-        <EnergyLogger />
-        <BPTAnalysis />
-      </div>
+    {#if activeTab === 'energy'}
+      <!-- Energy tab loads two components -->
+      {#await Promise.all([import('../EnergyLogger.svelte'), import('../BPTAnalysis.svelte')])}
+        <LoadingSkeleton rows={3} type="list" />
+      {:then [energyModule, bptModule]}
+        <div class="space-y-6">
+          <svelte:component this={energyModule.default} />
+          <svelte:component this={bptModule.default} />
+        </div>
+      {:catch error}
+        <div class="text-center py-12 text-red-400">
+          <p>Failed to load components: {error.message}</p>
+        </div>
+      {/await}
+    {:else}
+      {#await activeComponent}
+        <LoadingSkeleton rows={3} type="list" />
+      {:then module}
+        <svelte:component this={module.default} />
+      {:catch error}
+        <div class="text-center py-12 text-red-400">
+          <p>Failed to load component: {error.message}</p>
+        </div>
+      {/await}
     {/if}
   </div>
 </div>
