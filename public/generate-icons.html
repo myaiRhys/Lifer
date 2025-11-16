@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG to PNG Converter - Lifer Icons</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            color: white;
+            padding: 40px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #3b82f6, #9333ea, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 40px;
+        }
+        .converter {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .status {
+            background: rgba(15, 23, 42, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .status.success {
+            border-left: 4px solid #22c55e;
+        }
+        .status.info {
+            border-left: 4px solid #3b82f6;
+        }
+        button {
+            background: linear-gradient(135deg, #3b82f6, #9333ea);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.02);
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .preview-item {
+            background: rgba(15, 23, 42, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .preview-item canvas {
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .preview-item p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+        }
+        .hidden {
+            display: none;
+        }
+        .instructions {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Generate PNG Icons for iOS</h1>
+
+        <div class="converter">
+            <div class="status info">
+                <h3>📱 iOS Icon Requirements</h3>
+                <p>iOS requires PNG format for home screen icons. This tool will convert your SVG icon to PNG in all required sizes.</p>
+            </div>
+
+            <div id="status-message" class="hidden"></div>
+
+            <button id="generate-btn" onclick="generateAllIcons()">
+                🚀 Generate PNG Icons (180x180, 192x192, 512x512)
+            </button>
+
+            <div id="preview-section" class="hidden">
+                <h3 style="margin-top: 30px; margin-bottom: 20px;">Generated PNGs (Right-click to save):</h3>
+                <div class="preview-grid" id="preview-grid"></div>
+            </div>
+
+            <div class="instructions">
+                <h4>📝 After generating:</h4>
+                <ol>
+                    <li>Right-click each image below and <strong>"Save Image As..."</strong></li>
+                    <li>Save them to: <code>public/icons/</code></li>
+                    <li>Use these names:
+                        <ul>
+                            <li><code>apple-touch-icon-180.png</code> (180x180)</li>
+                            <li><code>icon-192.png</code> (192x192)</li>
+                            <li><code>icon-512.png</code> (512x512)</li>
+                        </ul>
+                    </li>
+                    <li>Update <code>index.html</code> to use PNG for apple-touch-icon</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function generateAllIcons() {
+            const btn = document.getElementById('generate-btn');
+            const statusMsg = document.getElementById('status-message');
+            const previewSection = document.getElementById('preview-section');
+            const previewGrid = document.getElementById('preview-grid');
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating...';
+
+            statusMsg.className = 'status info';
+            statusMsg.innerHTML = '<p>Loading SVG and generating PNGs...</p>';
+            statusMsg.classList.remove('hidden');
+
+            try {
+                // Fetch the SVG
+                const response = await fetch('./icons/icon.svg');
+                const svgText = await response.text();
+
+                // Parse SVG to get dimensions
+                const parser = new DOMParser();
+                const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+                const svgElement = svgDoc.querySelector('svg');
+
+                // Create an image from SVG
+                const img = new Image();
+                const svgBlob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(svgBlob);
+
+                img.onload = () => {
+                    // Generate each size
+                    const sizes = [
+                        { width: 180, height: 180, name: '180x180 (iOS)' },
+                        { width: 192, height: 192, name: '192x192 (Android)' },
+                        { width: 512, height: 512, name: '512x512 (PWA)' }
+                    ];
+
+                    previewGrid.innerHTML = '';
+
+                    sizes.forEach(size => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = size.width;
+                        canvas.height = size.height;
+                        const ctx = canvas.getContext('2d');
+
+                        // Draw white background (some icons need this)
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, size.width, size.height);
+
+                        // Draw SVG
+                        ctx.drawImage(img, 0, 0, size.width, size.height);
+
+                        // Create preview
+                        const previewItem = document.createElement('div');
+                        previewItem.className = 'preview-item';
+
+                        const displayCanvas = document.createElement('canvas');
+                        displayCanvas.width = 100;
+                        displayCanvas.height = 100;
+                        const displayCtx = displayCanvas.getContext('2d');
+                        displayCtx.drawImage(canvas, 0, 0, 100, 100);
+
+                        const downloadCanvas = canvas.cloneNode(true);
+                        downloadCanvas.getContext('2d').drawImage(canvas, 0, 0);
+
+                        previewItem.innerHTML = `
+                            <p><strong>${size.name}</strong></p>
+                            <p>Right-click image below to save</p>
+                        `;
+                        previewItem.appendChild(displayCanvas);
+
+                        // Add download link
+                        const downloadLink = document.createElement('a');
+                        downloadLink.download = `icon-${size.width}.png`;
+                        downloadLink.href = canvas.toDataURL('image/png');
+                        downloadLink.style.display = 'block';
+                        downloadLink.style.marginTop = '10px';
+                        downloadLink.style.color = '#3b82f6';
+                        downloadLink.style.textDecoration = 'none';
+                        downloadLink.textContent = '⬇️ Download PNG';
+                        downloadLink.onclick = (e) => {
+                            e.preventDefault();
+                            // Create temporary link and click it
+                            const tempLink = document.createElement('a');
+                            tempLink.href = canvas.toDataURL('image/png');
+                            tempLink.download = downloadLink.download;
+                            document.body.appendChild(tempLink);
+                            tempLink.click();
+                            document.body.removeChild(tempLink);
+                        };
+
+                        previewItem.appendChild(downloadLink);
+                        previewGrid.appendChild(previewItem);
+                    });
+
+                    URL.revokeObjectURL(url);
+
+                    statusMsg.className = 'status success';
+                    statusMsg.innerHTML = `
+                        <h3>✅ Success!</h3>
+                        <p>All PNG icons generated. Click the download links below each image, or right-click and "Save Image As..."</p>
+                    `;
+
+                    previewSection.classList.remove('hidden');
+                    btn.textContent = '✅ Generated! Click downloads below';
+                    btn.disabled = false;
+                };
+
+                img.onerror = () => {
+                    statusMsg.className = 'status error';
+                    statusMsg.innerHTML = '<p style="color: #ef4444;">❌ Error loading SVG. Make sure icon.svg exists in public/icons/</p>';
+                    btn.disabled = false;
+                    btn.textContent = '🚀 Try Again';
+                };
+
+                img.src = url;
+
+            } catch (error) {
+                statusMsg.className = 'status error';
+                statusMsg.innerHTML = `<p style="color: #ef4444;">❌ Error: ${error.message}</p>`;
+                btn.disabled = false;
+                btn.textContent = '🚀 Try Again';
+            }
+        }
+    </script>
+</body>
+</html>

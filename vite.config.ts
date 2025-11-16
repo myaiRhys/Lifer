@@ -25,22 +25,36 @@ export default defineConfig({
         start_url: baseUrl,
         categories: ['productivity', 'lifestyle', 'health-fitness', 'education'],
         icons: [
+          // PNG icons (preferred for iOS compatibility)
+          {
+            src: `${baseUrl}icons/icon-192.png`,
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any maskable'
+          },
+          {
+            src: `${baseUrl}icons/icon-512.png`,
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          },
+          {
+            src: `${baseUrl}icons/apple-touch-icon-180.png`,
+            sizes: '180x180',
+            type: 'image/png'
+          },
+          // SVG fallbacks for browsers that support them
           {
             src: `${baseUrl}icons/icon-192.svg`,
             sizes: '192x192',
             type: 'image/svg+xml',
-            purpose: 'any maskable'
+            purpose: 'any'
           },
           {
             src: `${baseUrl}icons/icon-512.svg`,
             sizes: '512x512',
             type: 'image/svg+xml',
-            purpose: 'any maskable'
-          },
-          {
-            src: `${baseUrl}icons/apple-touch-icon.svg`,
-            sizes: '180x180',
-            type: 'image/svg+xml'
+            purpose: 'any'
           }
         ],
         shortcuts: [
