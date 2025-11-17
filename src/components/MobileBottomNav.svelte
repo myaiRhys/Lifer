@@ -15,7 +15,7 @@
   ]
 
   function handleNavClick(itemId: string) {
-    if (itemId === currentView) return
+    console.log('Nav click:', itemId, 'current:', currentView)
 
     // Trigger haptic feedback
     Haptics.selection()
@@ -30,16 +30,16 @@
   style="background-color: var(--color-bg-secondary); opacity: 0.95; border-color: var(--color-border); box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.3);"
   aria-label="Main navigation"
 >
-  <div class="grid grid-cols-5 gap-1 px-8 py-8">
+  <div class="grid grid-cols-5 gap-1 px-2 py-2">
     {#each navItems as item}
       <button
         on:click={() => handleNavClick(item.id)}
-        class="nav-item flex flex-col items-center justify-center py-8 px-4 rounded-xl transition-all duration-300 relative {currentView === item.id ? 'active' : ''}"
+        class="nav-item flex flex-col items-center justify-center py-2 px-2 rounded-xl transition-all duration-300 relative {currentView === item.id ? 'active' : ''}"
         aria-label={item.label}
         aria-current={currentView === item.id ? 'page' : undefined}
       >
         <!-- Icon -->
-        <div class="nav-icon-wrapper relative mb-4">
+        <div class="nav-icon-wrapper relative mb-1">
           <span class="text-2xl transition-transform duration-300" role="img" aria-hidden="true">
             {item.icon}
           </span>
@@ -83,6 +83,8 @@
     border: none;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    min-height: 56px;
+    touch-action: manipulation;
   }
 
   .nav-item:hover {
