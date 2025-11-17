@@ -5,6 +5,8 @@
   import InsightsPage from './components/pages/InsightsPage.svelte'
   import ToolsPage from './components/pages/ToolsPage.svelte'
   import FocusPage from './components/pages/FocusPage.svelte'
+  import Profile from './components/Profile.svelte'
+  import AchievementGallery from './components/AchievementGallery.svelte'
   import Onboarding from './components/Onboarding.svelte'
   import WeeklyReview from './components/WeeklyReview.svelte'
   import PWAInstallPrompt from './components/PWAInstallPrompt.svelte'
@@ -30,7 +32,7 @@
   let touchStartX = 0
   let touchEndX = 0
 
-  const views = ['dashboard', 'input', 'insights', 'tools', 'focus']
+  const views = ['dashboard', 'input', 'insights', 'tools', 'focus', 'profile', 'achievements']
 
   function handleTouchStart(e: TouchEvent) {
     touchStartX = e.changedTouches[0].screenX
@@ -265,6 +267,22 @@
           <span class="text-2xl">⚡</span>
           <span>Focus</span>
         </button>
+
+        <button
+          class="flex items-center gap-3 px-6 py-3 rounded-2xl font-bold transition-all duration-300 whitespace-nowrap {currentView === 'achievements' ? 'bg-gradient-to-r from-yellow-600 to-orange-600 text-white shadow-2xl shadow-yellow-500/50 scale-105 border-2 border-yellow-400' : 'bg-slate-800/50 hover:bg-slate-700 hover:scale-105 hover:shadow-xl border-2 border-slate-700 hover:border-yellow-500'}"
+          on:click={() => currentView = 'achievements'}
+        >
+          <span class="text-2xl">🏆</span>
+          <span>Achievements</span>
+        </button>
+
+        <button
+          class="flex items-center gap-3 px-6 py-3 rounded-2xl font-bold transition-all duration-300 whitespace-nowrap {currentView === 'profile' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-2xl shadow-indigo-500/50 scale-105 border-2 border-indigo-400' : 'bg-slate-800/50 hover:bg-slate-700 hover:scale-105 hover:shadow-xl border-2 border-slate-700 hover:border-indigo-500'}"
+          on:click={() => currentView = 'profile'}
+        >
+          <span class="text-2xl">👤</span>
+          <span>Profile</span>
+        </button>
       </div>
     </div>
   </nav>
@@ -445,6 +463,10 @@
           <ToolsPage />
         {:else if currentView === 'focus'}
           <FocusPage />
+        {:else if currentView === 'achievements'}
+          <AchievementGallery />
+        {:else if currentView === 'profile'}
+          <Profile />
         {/if}
       </div>
     {/key}

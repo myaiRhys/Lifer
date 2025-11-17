@@ -5,11 +5,11 @@
   export let onNavigate: (view: string) => void
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: '📊', path: '/dashboard' },
+    { id: 'dashboard', label: 'Home', icon: '📊', path: '/dashboard' },
+    { id: 'achievements', label: 'Awards', icon: '🏆', path: '/achievements' },
     { id: 'input', label: 'Input', icon: '📝', path: '/input' },
-    { id: 'insights', label: 'Insights', icon: '📈', path: '/insights' },
     { id: 'tools', label: 'Tools', icon: '🛠️', path: '/tools' },
-    { id: 'focus', label: 'Focus', icon: '⚡', path: '/focus' }
+    { id: 'profile', label: 'Profile', icon: '👤', path: '/profile' }
   ]
 
   function handleNavClick(itemId: string) {
