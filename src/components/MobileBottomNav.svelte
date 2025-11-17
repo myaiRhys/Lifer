@@ -26,8 +26,8 @@
 
 <!-- Mobile Bottom Navigation - Only visible on mobile -->
 <nav
-  class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-bg-secondary/95 backdrop-blur-2xl border-t border-border safe-area-bottom"
-  style="box-shadow: var(--shadow-elevation-4)"
+  class="md:hidden fixed bottom-0 left-0 right-0 z-50 backdrop-blur-2xl border-t safe-area-bottom"
+  style="background-color: var(--color-bg-secondary); opacity: 0.95; border-color: var(--color-border); box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.3);"
   aria-label="Main navigation"
 >
   <div class="grid grid-cols-5 gap-1 px-8 py-8">
@@ -73,12 +73,12 @@
 
   .h-safe-bottom {
     height: env(safe-area-inset-bottom);
-    background: var(--bg-secondary);
+    background: var(--color-bg-secondary);
   }
 
   /* Nav Item */
   .nav-item {
-    color: var(--text-muted);
+    color: var(--color-text-muted);
     background: transparent;
     border: none;
     cursor: pointer;
@@ -86,11 +86,11 @@
   }
 
   .nav-item:hover {
-    background: var(--bg-primary);
+    background: var(--color-bg-primary);
   }
 
   .nav-item.active {
-    color: var(--accent);
+    color: var(--color-accent);
   }
 
   /* Icon wrapper */
@@ -119,7 +119,7 @@
     transform: translateX(-50%);
     width: 24px;
     height: 3px;
-    background: var(--accent);
+    background: var(--color-accent);
     border-radius: 2px;
     animation: slideIn 0.3s ease;
   }
@@ -140,7 +140,7 @@
     position: absolute;
     inset: 0;
     border-radius: 12px;
-    background: var(--accent);
+    background: var(--color-accent);
     opacity: 0;
     pointer-events: none;
   }
@@ -162,7 +162,7 @@
 
   /* Accessibility */
   .nav-item:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
   }
 </style>
