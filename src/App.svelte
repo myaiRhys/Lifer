@@ -514,7 +514,14 @@
   </main>
 
   <!-- Mobile Bottom Navigation -->
-  <MobileBottomNav {currentView} on:navigate={(e) => currentView = e.detail} />
+  <MobileBottomNav
+    {currentView}
+    on:navigate={(e) => {
+      console.log('App.svelte received navigate event:', e.detail)
+      currentView = e.detail
+      console.log('App.svelte currentView updated to:', currentView)
+    }}
+  />
 
   <!-- Hidden file input for import -->
   <input

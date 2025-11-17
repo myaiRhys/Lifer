@@ -17,10 +17,16 @@
   function handleNavClick(itemId: string) {
     console.log('Nav click:', itemId, 'current:', currentView)
 
-    // Trigger haptic feedback
-    Haptics.selection()
+    // Trigger haptic feedback - FIXED: was .selection(), should be .select()
+    try {
+      Haptics.select()
+    } catch (e) {
+      console.error('Haptics error:', e)
+    }
 
+    console.log('Dispatching navigate event with:', itemId)
     dispatch('navigate', itemId)
+    console.log('Navigate event dispatched')
   }
 </script>
 
