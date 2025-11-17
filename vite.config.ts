@@ -78,6 +78,9 @@ export default defineConfig({
         ]
       },
       workbox: {
+        modifyURLPrefix: {
+          '': baseUrl
+        },
         globPatterns: ['**/*.{js,css,html,svg,png,woff,woff2}'],
         runtimeCaching: [
           {
