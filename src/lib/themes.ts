@@ -12,7 +12,12 @@ export const themes: Record<Theme, { name: string; colors: Record<string, string
       'text-secondary': '#cbd5e1',
       'text-muted': '#94a3b8',
       'accent': '#3b82f6',
-      'accent-hover': '#2563eb'
+      'accent-hover': '#2563eb',
+      'gradient-start': '#3b82f6',
+      'gradient-mid': '#8b5cf6',
+      'gradient-end': '#d946ef',
+      'glow-color': 'rgba(59, 130, 246, 0.5)',
+      'shimmer-color': 'rgba(139, 92, 246, 0.3)'
     }
   },
   light: {
@@ -26,7 +31,12 @@ export const themes: Record<Theme, { name: string; colors: Record<string, string
       'text-secondary': '#475569',
       'text-muted': '#64748b',
       'accent': '#3b82f6',
-      'accent-hover': '#2563eb'
+      'accent-hover': '#2563eb',
+      'gradient-start': '#3b82f6',
+      'gradient-mid': '#8b5cf6',
+      'gradient-end': '#d946ef',
+      'glow-color': 'rgba(59, 130, 246, 0.4)',
+      'shimmer-color': 'rgba(139, 92, 246, 0.2)'
     }
   },
   ocean: {
@@ -40,7 +50,12 @@ export const themes: Record<Theme, { name: string; colors: Record<string, string
       'text-secondary': '#b3d9ff',
       'text-muted': '#6ba3cc',
       'accent': '#00b4d8',
-      'accent-hover': '#0096c7'
+      'accent-hover': '#0096c7',
+      'gradient-start': '#0066cc',
+      'gradient-mid': '#0099ff',
+      'gradient-end': '#00ccff',
+      'glow-color': 'rgba(0, 180, 216, 0.6)',
+      'shimmer-color': 'rgba(0, 204, 255, 0.3)'
     }
   },
   fire: {
@@ -54,7 +69,12 @@ export const themes: Record<Theme, { name: string; colors: Record<string, string
       'text-secondary': '#ffd4a3',
       'text-muted': '#cc9966',
       'accent': '#ff6b35',
-      'accent-hover': '#e63c00'
+      'accent-hover': '#e63c00',
+      'gradient-start': '#ff4500',
+      'gradient-mid': '#ff6347',
+      'gradient-end': '#ff8c00',
+      'glow-color': 'rgba(255, 107, 53, 0.7)',
+      'shimmer-color': 'rgba(255, 140, 0, 0.4)'
     }
   },
   forest: {
@@ -68,7 +88,12 @@ export const themes: Record<Theme, { name: string; colors: Record<string, string
       'text-secondary': '#b8e6b8',
       'text-muted': '#7cbd7c',
       'accent': '#4ade80',
-      'accent-hover': '#22c55e'
+      'accent-hover': '#22c55e',
+      'gradient-start': '#228b22',
+      'gradient-mid': '#32cd32',
+      'gradient-end': '#90ee90',
+      'glow-color': 'rgba(74, 222, 128, 0.6)',
+      'shimmer-color': 'rgba(144, 238, 144, 0.3)'
     }
   },
   sunset: {
@@ -82,7 +107,12 @@ export const themes: Record<Theme, { name: string; colors: Record<string, string
       'text-secondary': '#ffb3e6',
       'text-muted': '#cc80b8',
       'accent': '#f472b6',
-      'accent-hover': '#ec4899'
+      'accent-hover': '#ec4899',
+      'gradient-start': '#ec4899',
+      'gradient-mid': '#f472b6',
+      'gradient-end': '#fbbf24',
+      'glow-color': 'rgba(244, 114, 182, 0.6)',
+      'shimmer-color': 'rgba(251, 191, 36, 0.3)'
     }
   },
   military: {
@@ -96,7 +126,12 @@ export const themes: Record<Theme, { name: string; colors: Record<string, string
       'text-secondary': '#c2d6c2',
       'text-muted': '#8fad8f',
       'accent': '#4ade80',
-      'accent-hover': '#22c55e'
+      'accent-hover': '#22c55e',
+      'gradient-start': '#3d5c3d',
+      'gradient-mid': '#4ade80',
+      'gradient-end': '#22c55e',
+      'glow-color': 'rgba(74, 222, 128, 0.5)',
+      'shimmer-color': 'rgba(61, 92, 61, 0.3)'
     }
   },
   cowboy: {
@@ -110,7 +145,12 @@ export const themes: Record<Theme, { name: string; colors: Record<string, string
       'text-secondary': '#f5d6b3',
       'text-muted': '#d2a679',
       'accent': '#d2691e',
-      'accent-hover': '#b8541a'
+      'accent-hover': '#b8541a',
+      'gradient-start': '#8b4a28',
+      'gradient-mid': '#d2691e',
+      'gradient-end': '#daa520',
+      'glow-color': 'rgba(210, 105, 30, 0.6)',
+      'shimmer-color': 'rgba(218, 165, 32, 0.3)'
     }
   },
   academic: {
@@ -124,7 +164,12 @@ export const themes: Record<Theme, { name: string; colors: Record<string, string
       'text-secondary': '#d4d6ff',
       'text-muted': '#a0a5cc',
       'accent': '#6366f1',
-      'accent-hover': '#4f46e5'
+      'accent-hover': '#4f46e5',
+      'gradient-start': '#4f46e5',
+      'gradient-mid': '#6366f1',
+      'gradient-end': '#818cf8',
+      'glow-color': 'rgba(99, 102, 241, 0.6)',
+      'shimmer-color': 'rgba(129, 140, 248, 0.3)'
     }
   },
   cyberpunk: {
@@ -138,7 +183,12 @@ export const themes: Record<Theme, { name: string; colors: Record<string, string
       'text-secondary': '#ff006e',
       'text-muted': '#b366ff',
       'accent': '#ff006e',
-      'accent-hover': '#d6005c'
+      'accent-hover': '#d6005c',
+      'gradient-start': '#6b46c1',
+      'gradient-mid': '#ff006e',
+      'gradient-end': '#00f5ff',
+      'glow-color': 'rgba(255, 0, 110, 0.8)',
+      'shimmer-color': 'rgba(0, 245, 255, 0.4)'
     }
   },
   zen: {
@@ -152,7 +202,12 @@ export const themes: Record<Theme, { name: string; colors: Record<string, string
       'text-secondary': '#d8f3d8',
       'text-muted': '#95d5b2',
       'accent': '#52b788',
-      'accent-hover': '#40916c'
+      'accent-hover': '#40916c',
+      'gradient-start': '#40916c',
+      'gradient-mid': '#52b788',
+      'gradient-end': '#95d5b2',
+      'glow-color': 'rgba(82, 183, 136, 0.5)',
+      'shimmer-color': 'rgba(149, 213, 178, 0.3)'
     }
   }
 }

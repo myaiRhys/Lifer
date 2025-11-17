@@ -189,57 +189,90 @@
   {:else}
     <!-- Top Bar: Avatar + Level + XP + Streak -->
     {#if userState}
-    <div class="flex items-center justify-between mb-8">
+    <div class="flex items-center justify-between mb-8 animate-fade-in-up">
       <div class="flex items-center gap-4">
-        <!-- Avatar with Level Badge -->
-        <div class="relative">
-          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-            <span class="text-2xl font-bold text-white">{userState.level}</span>
+        <!-- Enhanced Avatar with Level Badge & Glow -->
+        <div class="relative level-badge-glow gpu-accelerated">
+          <!-- Shield/Crest Shape with Gradient & Glow -->
+          <div class="relative w-20 h-20 rounded-2xl elevation-3 interactive-scale"
+               style="background: linear-gradient(135deg, var(--color-gradient-start, #3b82f6) 0%, var(--color-gradient-mid, #8b5cf6) 50%, var(--color-gradient-end, #d946ef) 100%); box-shadow: var(--shadow-3), 0 0 30px var(--color-glow-color, rgba(59, 130, 246, 0.5));">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="text-4xl font-black text-white tabular-nums" style="text-shadow: 0 2px 8px rgba(0,0,0,0.3);">{userState.level}</span>
+            </div>
+            <!-- Animated ring around badge -->
+            <div class="absolute inset-0 rounded-2xl border-2 border-white/20 animate-glow-pulse"></div>
           </div>
-          <div class="absolute -bottom-1 -right-1 bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full border-2 border-slate-900">
+          <!-- Level Badge -->
+          <div class="absolute -bottom-2 -right-2 px-3 py-1 rounded-full text-xs font-black elevation-2 animate-bounce-in"
+               style="background: linear-gradient(135deg, var(--color-accent, #3b82f6), var(--color-accent-hover, #2563eb)); color: white; letter-spacing: 0.05em;">
             LVL {userState.level}
           </div>
         </div>
 
-        <!-- XP Counter -->
-        <div>
-          <div class="text-sm text-slate-400">Experience</div>
-          <div class="text-3xl font-bold text-blue-400">{userState.xp.toLocaleString()} XP</div>
-          <div class="text-xs text-slate-500">{userState.xpForNextLevel - userState.xp} to next level</div>
+        <!-- Enhanced XP Counter with Animations -->
+        <div class="animate-fade-in-scale stagger-1">
+          <div class="text-sm font-semibold uppercase tracking-wide" style="color: var(--color-text-muted);">Experience</div>
+          <div class="text-4xl font-black tabular-nums xp-counter transition-smooth"
+               style="color: var(--color-gradient-mid, #8b5cf6); text-shadow: 0 0 20px var(--color-glow-color, rgba(139, 92, 246, 0.5));">
+            {userState.xp.toLocaleString()}
+            <span class="text-2xl font-bold" style="color: var(--color-text-secondary);">XP</span>
+          </div>
+          <div class="text-sm font-medium" style="color: var(--color-text-muted);">
+            {(userState.xpForNextLevel - userState.xp).toLocaleString()} to next level
+          </div>
         </div>
       </div>
 
-      <!-- Streak Counter -->
-      <div class="text-right">
-        <div class="text-sm text-slate-400 mb-1">Current Streak</div>
-        <div class="flex items-center gap-2">
-          <span class="text-4xl">🔥</span>
-          <span class="text-4xl font-bold text-orange-400">{userState.currentStreak}</span>
+      <!-- Enhanced Streak Counter with Flame Animation & Glow -->
+      <div class="text-right animate-fade-in-scale stagger-2">
+        <div class="text-sm font-semibold uppercase tracking-wide mb-1" style="color: var(--color-text-muted);">Current Streak</div>
+        <div class="flex items-center gap-3 justify-end">
+          <span class="text-5xl animate-flame-flicker animate-glow-pulse-streak" style="filter: drop-shadow(0 0 12px rgba(255, 140, 0, 0.7));">🔥</span>
+          <span class="text-5xl font-black tabular-nums transition-smooth"
+                style="color: #ff8c00; text-shadow: 0 0 20px rgba(255, 140, 0, 0.8);">
+            {userState.currentStreak}
+          </span>
         </div>
-        <div class="text-xs text-slate-500">Best: {userState.longestStreak} days</div>
+        <div class="text-sm font-medium mt-1" style="color: var(--color-text-muted);">
+          Best: <span class="font-bold" style="color: var(--color-text-secondary);">{userState.longestStreak}</span> days
+        </div>
       </div>
     </div>
 
-    <!-- XP Progress Bar (Full Width) -->
-    <div class="mb-8">
-      <div class="w-full bg-slate-800 rounded-full h-4 overflow-hidden">
+    <!-- Enhanced XP Progress Bar with Shimmer & Glow -->
+    <div class="mb-8 animate-fade-in-up stagger-3">
+      <div class="relative w-full rounded-full h-5 elevation-1 overflow-hidden" style="background: var(--color-bg-tertiary, #334155);">
+        <!-- Progress fill with gradient and shimmer -->
         <div
-          class="h-full bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-500 ease-out"
-          style="width: {getXPPercentage(userState)}%"
-        />
+          class="absolute inset-0 h-full rounded-full transition-all duration-500 ease-out elevation-glow-2 xp-bar-shimmer"
+          style="width: {getXPPercentage(userState)}%; background: linear-gradient(90deg, var(--color-gradient-start, #3b82f6) 0%, var(--color-gradient-mid, #8b5cf6) 50%, var(--color-gradient-end, #d946ef) 100%); box-shadow: inset 0 1px 2px rgba(255,255,255,0.1), 0 0 20px var(--color-glow-color, rgba(139, 92, 246, 0.4));"
+        >
+          <!-- Inner highlight for depth -->
+          <div class="absolute top-0 left-0 right-0 h-1/2 rounded-full" style="background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);"></div>
+        </div>
+        <!-- Percentage text overlay -->
+        <div class="absolute inset-0 flex items-center justify-center">
+          <span class="text-xs font-black tabular-nums text-white" style="text-shadow: 0 1px 3px rgba(0,0,0,0.8); mix-blend-mode: difference;">
+            {Math.round(getXPPercentage(userState))}%
+          </span>
+        </div>
       </div>
     </div>
   {/if}
 
-  <!-- Identity Statement Card (PROMINENT) -->
+  <!-- Enhanced Identity Statement Card (PROMINENT) -->
   {#if identity}
-    <div class="bg-gradient-to-r from-indigo-900/40 to-purple-900/40 border-2 border-indigo-600 rounded-2xl p-6 mb-8 shadow-xl">
-      <div class="flex items-start gap-3 mb-4">
-        <span class="text-4xl">🎯</span>
+    <div class="relative rounded-2xl p-6 mb-8 elevation-3 interactive-lift animate-fade-in-up stagger-4 overflow-hidden"
+         style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2)); border: 2px solid var(--color-accent, #6366f1); box-shadow: var(--shadow-3), 0 0 30px rgba(99, 102, 241, 0.3);">
+      <!-- Glow effect background -->
+      <div class="absolute -inset-1 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 rounded-2xl blur-xl -z-10"></div>
+
+      <div class="flex items-start gap-4 mb-4">
+        <span class="text-5xl animate-bounce-in">🎯</span>
         <div class="flex-1">
-          <div class="text-sm uppercase tracking-wide text-indigo-400 font-semibold mb-2">Your Identity</div>
-          <p class="text-2xl font-bold leading-tight">
-            I am a person who <span class="text-indigo-300">{identity.statement}</span>
+          <div class="text-xs uppercase tracking-widest font-black mb-2" style="color: var(--color-accent, #6366f1);">Your Identity</div>
+          <p class="text-2xl font-black leading-tight" style="color: var(--color-text-primary);">
+            I am a person who <span style="color: var(--color-accent, #6366f1); text-shadow: 0 0 20px var(--color-glow-color, rgba(99, 102, 241, 0.5));">{identity.statement}</span>
           </p>
         </div>
       </div>
@@ -248,18 +281,19 @@
         <div class="flex items-center gap-4 mt-4">
           <div class="flex-1">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-sm text-slate-300">Today's Alignment</span>
-              <span class="text-2xl font-bold {todayAlignment.percentage >= 80 ? 'text-green-400' : todayAlignment.percentage >= 60 ? 'text-yellow-400' : 'text-red-400'}">
+              <span class="text-sm font-bold" style="color: var(--color-text-secondary);">Today's Alignment</span>
+              <span class="text-3xl font-black tabular-nums {todayAlignment.percentage >= 80 ? 'text-green-400' : todayAlignment.percentage >= 60 ? 'text-yellow-400' : 'text-red-400'}"
+                    style="text-shadow: 0 0 15px currentColor;">
                 {todayAlignment.percentage}%
               </span>
             </div>
-            <div class="w-full bg-slate-700/50 h-3 rounded-full overflow-hidden">
+            <div class="relative w-full h-4 rounded-full overflow-hidden elevation-1" style="background: var(--color-bg-tertiary, #334155);">
               <div
-                class="h-full bg-gradient-to-r from-green-500 to-green-300 transition-all duration-500"
-                style="width: {todayAlignment.percentage}%"
+                class="h-full bg-gradient-to-r from-green-500 to-green-300 transition-all duration-500 xp-bar-shimmer"
+                style="width: {todayAlignment.percentage}%; box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);"
               />
             </div>
-            <div class="flex items-center gap-4 mt-2 text-sm">
+            <div class="flex items-center gap-4 mt-2 text-sm font-bold">
               <span class="text-green-400">↑ {todayAlignment.votesFor} votes for</span>
               <span class="text-red-400">↓ {todayAlignment.votesAgainst} votes against</span>
             </div>
@@ -431,27 +465,30 @@
     {/if}
   </div>
 
-  <!-- High Leverage Tasks Section (CONSTRAINT: MAX 6) -->
-  <div class="mb-8">
+  <!-- Enhanced High Leverage Tasks Section (CONSTRAINT: MAX 6) -->
+  <div class="mb-8 animate-fade-in-up stagger-4">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-2xl font-bold">Today's High-Leverage Tasks</h3>
-      <span class="text-sm text-slate-400">{highLeverageTasks.length}/6 tasks</span>
+      <h3 class="text-3xl font-black" style="color: var(--color-text-primary);">Today's High-Leverage Tasks</h3>
+      <span class="text-sm font-bold px-3 py-1 rounded-full elevation-1" style="background: var(--color-bg-tertiary); color: var(--color-text-muted);">
+        {highLeverageTasks.length}/6 tasks
+      </span>
     </div>
 
     {#if highLeverageTasks.length === 0}
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-8 text-center">
-        <div class="text-4xl mb-3">🎯</div>
-        <div class="text-lg font-semibold mb-2">No high-leverage tasks yet</div>
-        <p class="text-slate-400 text-sm">
+      <div class="rounded-2xl p-8 text-center elevation-1 interactive-lift" style="background: var(--color-bg-secondary); border: 2px solid var(--color-border);">
+        <div class="text-6xl mb-4 animate-heartbeat">🎯</div>
+        <div class="text-xl font-bold mb-2" style="color: var(--color-text-primary);">No high-leverage tasks yet</div>
+        <p class="text-sm" style="color: var(--color-text-muted);">
           Add tasks with leverage score 7+ to focus on what matters most
         </p>
       </div>
     {:else}
-      <div class="space-y-3">
-        {#each highLeverageTasks as task}
+      <div class="space-y-4">
+        {#each highLeverageTasks as task, i}
           <button
             on:click={() => handleTaskToggle(task)}
-            class="w-full {getLeverageColor(task.leverageScore)} border-l-4 rounded-xl p-4 text-left transition-all hover:scale-[1.02] {task.completed ? 'opacity-60' : ''}"
+            class="w-full {getLeverageColor(task.leverageScore)} border-l-4 rounded-xl p-5 text-left transition-smooth interactive-lift gpu-accelerated elevation-2 animate-fade-in-scale {task.completed ? 'opacity-60' : ''}"
+            style="animation-delay: {i * 0.05}s;"
           >
             <div class="flex items-start gap-4">
               <!-- Progress Ring -->
@@ -538,28 +575,32 @@
     {/if}
   </div>
 
-  <!-- Quick Actions Bar -->
-  <div class="sticky bottom-0 bg-slate-900/95 backdrop-blur border-t border-slate-700 p-4 -mx-6 -mb-6">
-    <div class="flex items-center justify-center gap-4">
+  <!-- Enhanced Quick Actions Bar with Glassmorphism & Glows -->
+  <div class="sticky bottom-0 backdrop-blur-xl border-t elevation-3 p-4 -mx-6 -mb-6"
+       style="background: linear-gradient(180deg, transparent 0%, var(--color-bg-primary, #0f172a) 20%); border-color: var(--color-border, #475569);">
+    <div class="flex items-center justify-center gap-3 flex-wrap">
       <button
         on:click={() => dispatch('navigate', 'input')}
-        class="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-semibold transition-colors"
+        class="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-smooth interactive-glow interactive-scale elevation-2 gpu-accelerated"
+        style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; box-shadow: var(--shadow-2), 0 0 20px rgba(59, 130, 246, 0.4);"
       >
-        <span class="text-xl">✅</span>
+        <span class="text-2xl">✅</span>
         <span>Add Task</span>
       </button>
       <button
         on:click={() => dispatch('navigate', 'tools')}
-        class="flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-500 rounded-xl font-semibold transition-colors"
+        class="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-smooth interactive-glow interactive-scale elevation-2 gpu-accelerated"
+        style="background: linear-gradient(135deg, #f97316, #ea580c); color: white; box-shadow: var(--shadow-2), 0 0 20px rgba(249, 115, 22, 0.4);"
       >
-        <span class="text-xl">⚡</span>
+        <span class="text-2xl">⚡</span>
         <span>Energy Check</span>
       </button>
       <button
         on:click={() => dispatch('navigate', 'focus')}
-        class="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-500 rounded-xl font-semibold transition-colors"
+        class="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-smooth interactive-glow interactive-scale elevation-2 gpu-accelerated"
+        style="background: linear-gradient(135deg, #a855f7, #9333ea); color: white; box-shadow: var(--shadow-2), 0 0 20px rgba(168, 85, 247, 0.4);"
       >
-        <span class="text-xl">🎯</span>
+        <span class="text-2xl">🎯</span>
         <span>Start Focus</span>
       </button>
     </div>
