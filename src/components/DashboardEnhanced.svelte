@@ -25,6 +25,7 @@
     getSeasonEmoji,
     getSeasonColors
   } from '../lib/db'
+  import LoadingSkeleton from './shared/LoadingSkeleton.svelte'
   import type { UserState, Task, Practice, Chore, Identity, IdentityAlignment, MorningSession, SeasonPhase } from '../lib/types'
 
   const dispatch = createEventDispatcher()
@@ -46,28 +47,64 @@
   let authenticityAlert: any = null
   let currentSeason: SeasonPhase | undefined
   let seasonTransition: any = null
+  let isLoading = true
 
   onMount(async () => {
     await loadDashboard()
+    isLoading = false
   })
 
   async function loadDashboard() {
-    userState = await getUserState()
-    activeTasks = await getActiveTasks()
-    todaysPractices = await getTodaysPractices()
-    todaysChores = await getTodaysChores()
-    identity = await getIdentity()
-    todayAlignment = await getTodayAlignment()
-    atRiskPractices = await getAtRiskPractices()
-    criticalPractices = await getCriticalPractices()
-    morningSession = await getCurrentMorningSession()
+    // Load all data in parallel for better performance
+    const [
+      userStateData,
+      activeTasksData,
+      todaysPracticesData,
+      todaysChoresData,
+      identityData,
+      todayAlignmentData,
+      atRiskPracticesData,
+      criticalPracticesData,
+      morningSessionData,
+      gatewayAnalyticsData,
+      authenticityAlertData,
+      currentSeasonData,
+      seasonTransitionData
+    ] = await Promise.all([
+      getUserState(),
+      getActiveTasks(),
+      getTodaysPractices(),
+      getTodaysChores(),
+      getIdentity(),
+      getTodayAlignment(),
+      getAtRiskPractices(),
+      getCriticalPractices(),
+      getCurrentMorningSession(),
+      getGatewayAnalytics(),
+      checkLowAuthenticityAlert(),
+      getCurrentSeason(),
+      checkSeasonTransition()
+    ])
+
+    // Assign all data
+    userState = userStateData
+    activeTasks = activeTasksData
+    todaysPractices = todaysPracticesData
+    todaysChores = todaysChoresData
+    identity = identityData
+    todayAlignment = todayAlignmentData
+    atRiskPractices = atRiskPracticesData
+    criticalPractices = criticalPracticesData
+    morningSession = morningSessionData
+    gatewayAnalytics = gatewayAnalyticsData
+    authenticityAlert = authenticityAlertData
+    currentSeason = currentSeasonData
+    seasonTransition = seasonTransitionData
+
+    // Load morning time remaining if session exists
     if (morningSession) {
       morningTimeRemaining = await getMorningWindowTimeRemaining()
     }
-    gatewayAnalytics = await getGatewayAnalytics()
-    authenticityAlert = await checkLowAuthenticityAlert()
-    currentSeason = await getCurrentSeason()
-    seasonTransition = await checkSeasonTransition()
   }
 
   async function handleTaskToggle(task: Task) {
@@ -143,8 +180,15 @@
 </script>
 
 <div class="max-w-6xl mx-auto p-6">
-  <!-- Top Bar: Avatar + Level + XP + Streak -->
-  {#if userState}
+  {#if isLoading}
+    <!-- Loading Skeleton -->
+    <div class="space-y-6">
+      <LoadingSkeleton rows={3} type="card" />
+      <LoadingSkeleton rows={5} type="list" />
+    </div>
+  {:else}
+    <!-- Top Bar: Avatar + Level + XP + Streak -->
+    {#if userState}
     <div class="flex items-center justify-between mb-8">
       <div class="flex items-center gap-4">
         <!-- Avatar with Level Badge -->
@@ -520,6 +564,7 @@
       </button>
     </div>
   </div>
+  {/if}
 </div>
 
 <!-- Practice Log Modal -->

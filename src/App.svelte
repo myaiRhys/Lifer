@@ -12,7 +12,7 @@
   import AppUpdateNotification from './components/AppUpdateNotification.svelte'
   import ExportDialog from './components/ExportDialog.svelte'
   import MobileBottomNav from './components/MobileBottomNav.svelte'
-  import { initializeStorage, getSettings, updateSettings } from './lib/db'
+  import { getSettings, updateSettings } from './lib/db'
   import { applyTheme, getStoredTheme } from './lib/themes'
   import { notificationSystem } from './lib/notifications'
   import { exportAllData, importAllData, downloadBackup, readBackupFile } from './lib/db/backup'
@@ -63,7 +63,8 @@
   }
 
   onMount(async () => {
-    await initializeStorage()
+    // Don't call initializeStorage() - already called in main.ts
+    // Just load settings and apply theme
     settings = await getSettings()
 
     // Check if onboarding is needed

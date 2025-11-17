@@ -187,26 +187,43 @@ export async function initializeStorage() {
     }
   }
 
-  // Initialize empty arrays if needed (core collections)
-  if (!await get(KEYS.TASKS)) await set(KEYS.TASKS, [])
-  if (!await get(KEYS.OUTCOMES)) await set(KEYS.OUTCOMES, [])
-  if (!await get(KEYS.HISTORY)) await set(KEYS.HISTORY, [])
-  if (!await get(KEYS.RECURRING_TASKS)) await set(KEYS.RECURRING_TASKS, [])
-  if (!await get(KEYS.CHORES)) await set(KEYS.CHORES, [])
+  // Initialize all collections in parallel for better performance
+  const collectionsToInit = [
+    KEYS.TASKS,
+    KEYS.OUTCOMES,
+    KEYS.HISTORY,
+    KEYS.RECURRING_TASKS,
+    KEYS.CHORES,
+    KEYS.IDENTITY_VOTES,
+    KEYS.IDENTITY_EVIDENCE,
+    KEYS.IDENTITY_ALIGNMENT,
+    KEYS.RECOVERY_EVENTS,
+    KEYS.MORNING_SESSIONS,
+    KEYS.HABIT_STACKS,
+    KEYS.HABIT_STACK_COMPLETIONS,
+    KEYS.AUTHENTICITY_LOGS,
+    KEYS.MARGINAL_GAIN_LOGS,
+    KEYS.MAKER_MODE_SESSIONS,
+    KEYS.COOKIE_JAR_VICTORIES,
+    KEYS.SEASON_PHASES
+  ]
 
-  // Initialize v2.0+ feature collections
-  if (!await get(KEYS.IDENTITY_VOTES)) await set(KEYS.IDENTITY_VOTES, [])
-  if (!await get(KEYS.IDENTITY_EVIDENCE)) await set(KEYS.IDENTITY_EVIDENCE, [])
-  if (!await get(KEYS.IDENTITY_ALIGNMENT)) await set(KEYS.IDENTITY_ALIGNMENT, [])
-  if (!await get(KEYS.RECOVERY_EVENTS)) await set(KEYS.RECOVERY_EVENTS, [])
-  if (!await get(KEYS.MORNING_SESSIONS)) await set(KEYS.MORNING_SESSIONS, [])
-  if (!await get(KEYS.HABIT_STACKS)) await set(KEYS.HABIT_STACKS, [])
-  if (!await get(KEYS.HABIT_STACK_COMPLETIONS)) await set(KEYS.HABIT_STACK_COMPLETIONS, [])
-  if (!await get(KEYS.AUTHENTICITY_LOGS)) await set(KEYS.AUTHENTICITY_LOGS, [])
-  if (!await get(KEYS.MARGINAL_GAIN_LOGS)) await set(KEYS.MARGINAL_GAIN_LOGS, [])
-  if (!await get(KEYS.MAKER_MODE_SESSIONS)) await set(KEYS.MAKER_MODE_SESSIONS, [])
-  if (!await get(KEYS.COOKIE_JAR_VICTORIES)) await set(KEYS.COOKIE_JAR_VICTORIES, [])
-  if (!await get(KEYS.SEASON_PHASES)) await set(KEYS.SEASON_PHASES, [])
+  // Fetch all collections in parallel
+  const existingCollections = await Promise.all(
+    collectionsToInit.map(key => get(key))
+  )
+
+  // Set missing collections in parallel
+  const initPromises = existingCollections
+    .map((value, index) => {
+      if (!value) {
+        return set(collectionsToInit[index], [])
+      }
+      return null
+    })
+    .filter(promise => promise !== null)
+
+  await Promise.all(initPromises)
 
   // Migrate recurring tasks to practices (one-time migration)
   await migrateRecurringTasksToPractices()
