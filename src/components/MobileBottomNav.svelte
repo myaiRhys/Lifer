@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte'
   import { Haptics } from '../lib/haptics'
 
   export let currentView: string
-  export let onNavigate: (view: string) => void
+
+  const dispatch = createEventDispatcher<{ navigate: string }>()
 
   const navItems = [
     { id: 'dashboard', label: 'Home', icon: '📊', path: '/dashboard' },
@@ -18,7 +20,7 @@
     // Trigger haptic feedback
     Haptics.selection()
 
-    onNavigate(itemId)
+    dispatch('navigate', itemId)
   }
 </script>
 

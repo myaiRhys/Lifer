@@ -31,16 +31,61 @@
   // Swipe gesture support for mobile
   let touchStartX = 0
   let touchEndX = 0
+  let touchStartY = 0
 
   const views = ['dashboard', 'input', 'insights', 'tools', 'focus', 'profile', 'achievements']
 
   function handleTouchStart(e: TouchEvent) {
+    const target = e.target as HTMLElement
+
+    // Don't intercept touches on scrollable containers or their children
+    if (isScrollableElement(target)) {
+      return
+    }
+
     touchStartX = e.changedTouches[0].screenX
+    touchStartY = e.changedTouches[0].screenY
   }
 
   function handleTouchEnd(e: TouchEvent) {
+    const target = e.target as HTMLElement
+
+    // Don't intercept touches on scrollable containers
+    if (isScrollableElement(target)) {
+      return
+    }
+
     touchEndX = e.changedTouches[0].screenX
-    handleSwipe()
+    const touchEndY = e.changedTouches[0].screenY
+
+    // Only handle swipe if it's primarily horizontal
+    const horizontalDiff = Math.abs(touchStartX - touchEndX)
+    const verticalDiff = Math.abs(touchStartY - touchEndY)
+
+    if (horizontalDiff > verticalDiff) {
+      handleSwipe()
+    }
+  }
+
+  function isScrollableElement(element: HTMLElement): boolean {
+    // Check if element or any parent is scrollable
+    let current = element
+    while (current && current !== document.body) {
+      const style = window.getComputedStyle(current)
+      const overflowX = style.overflowX
+      const overflowY = style.overflowY
+
+      // Check if element has overflow-x: auto or scroll, or is in a scrollable container
+      if (overflowX === 'auto' || overflowX === 'scroll' ||
+          overflowY === 'auto' || overflowY === 'scroll' ||
+          current.classList.contains('overflow-x-auto') ||
+          current.classList.contains('scrollbar-hide')) {
+        return true
+      }
+
+      current = current.parentElement as HTMLElement
+    }
+    return false
   }
 
   function handleSwipe() {
@@ -58,10 +103,6 @@
         currentView = views[currentIndex - 1]
       }
     }
-  }
-
-  function handleNavigation(view: string) {
-    currentView = view
   }
 
   onMount(async () => {
@@ -473,7 +514,7 @@
   </main>
 
   <!-- Mobile Bottom Navigation -->
-  <MobileBottomNav {currentView} onNavigate={handleNavigation} />
+  <MobileBottomNav {currentView} on:navigate={(e) => currentView = e.detail} />
 
   <!-- Hidden file input for import -->
   <input
