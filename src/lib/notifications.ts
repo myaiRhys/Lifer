@@ -44,8 +44,8 @@ class NotificationSystem {
     if (this.permissionGranted) {
       new Notification(title, {
         body,
-        icon: icon || '/Lifer/icons/icon-192.svg',
-        badge: '/Lifer/icons/icon-192.svg',
+        icon: icon || '/lifer/icons/icon-192.svg',
+        badge: '/lifer/icons/icon-192.svg',
         tag: 'lifer-notification',
         renotify: true
       })
@@ -145,8 +145,8 @@ class NotificationSystem {
     if ('Notification' in window && this.permissionGranted) {
       const notification = new Notification(title, {
         body,
-        icon: '/Lifer/icons/icon-192.svg',
-        badge: '/Lifer/icons/icon-192.svg',
+        icon: '/lifer/icons/icon-192.svg',
+        badge: '/lifer/icons/icon-192.svg',
         tag: 'lifer-timer',
         requireInteraction: true, // Notification stays until user interacts
         vibrate: [200, 100, 200], // Vibration pattern for mobile
